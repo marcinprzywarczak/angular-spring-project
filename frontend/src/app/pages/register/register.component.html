@@ -1,0 +1,41 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="flex items-center justify-center"
+>
+  <div class="w-1/2 flex flex-col">
+    <div class="flex flex-col">
+      <label>Email</label>
+      <input pInputText formControlName="email" type="email" />
+    </div>
+
+    <div class="flex flex-col">
+      <label>Name</label>
+      <input pInputText formControlName="name" type="text" />
+    </div>
+
+    <div class="flex flex-col">
+      <label>Password</label>
+      <input
+        pPassword
+        class="w-full"
+        formControlName="password"
+        [feedback]="false"
+        type="password"
+      />
+    </div>
+
+    <div class="flex flex-col">
+      <label>Password confirmation</label>
+      <input
+        pPassword
+        class="w-full"
+        formControlName="passwordConfirmation"
+        [feedback]="false"
+        type="password"
+      />
+    </div>
+
+    <button pButton label="Register"></button>
+  </div>
+</form>
