@@ -29,8 +29,16 @@ export class RegisterComponent implements OnInit {
         password: this.form.get('password')?.value,
         matchingPassword: this.form.get('passwordConfirmation')?.value,
       })
-      .subscribe((res) => {
-        console.log(res);
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+        },
+        error: (error) => {
+          console.log(error);
+          console.log('error', error.error.message);
+          if (error.status === 409)
+            console.log(JSON.parse(error.error.message));
+        },
       });
   }
 }

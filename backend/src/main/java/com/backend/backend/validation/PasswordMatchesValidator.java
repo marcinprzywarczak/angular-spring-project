@@ -13,7 +13,8 @@ public class PasswordMatchesValidator
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context){
         UserDto user = (UserDto) obj;
-//        System.out.println("password validation" + user.getPassword().equals(user.getMatchingPassword()));
+        if(user.getPassword() == null || user.getMatchingPassword() == null)
+            return false;
         return user.getPassword().equals(user.getMatchingPassword());
     }
 }

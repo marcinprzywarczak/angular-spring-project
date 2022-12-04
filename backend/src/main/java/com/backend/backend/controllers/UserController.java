@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("*")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
@@ -28,18 +28,11 @@ public class UserController {
 
     @GetMapping
     public List<User> findAllUsers() {
-        System.out.println("test");
-        List<User> lista = userRepository.findAll();
-        System.out.println(lista.get(0).getName());
-        System.out.println(lista.size());
         return userRepository.findAll();
     }
 
     @GetMapping("/all")
     public List<User> all() {
-
-        System.out.println("test");
-        System.out.println(userRepository.findUserAll());
         return userRepository.findUserAll();
     }
 
@@ -65,15 +58,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @RequestBody UserDto userDto,
+    public User register(@Valid @RequestBody UserDto userDto,
                            HttpServletRequest request,
                            Errors errors){
-        try {
-            User registered = userService.registerNewUserAccount(userDto);
-        } catch (UserAlreadyExistException uaeEx) {
-            return "An account for that username/email already exists.";
-        }
 
-        return "Success";
+        User registered = userService.registerNewUserAccount(userDto);
+
+
+        return registered;
     }
 }

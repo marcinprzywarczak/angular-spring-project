@@ -3,21 +3,22 @@ package com.backend.backend.dto;
 import com.backend.backend.validation.PasswordMatches;
 import com.backend.backend.validation.ValidEmail;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @PasswordMatches
 public class UserDto {
-    @NotNull(message = "The full name is required.")
-    @Size(min = 1, max = 2, message = "min validtioan")
+    @NotBlank(message = "Name is required!")
     private String name;
 
-    @NotNull
+    @NotBlank(message = "Password is required!")
     private String password;
+    @NotBlank(message = "Password confirmation is required!")
     private String matchingPassword;
 
-    @NotNull
-    @ValidEmail
+    @NotBlank(message = "Email is required!")
+    @ValidEmail(message = "Email is wrong!")
     private String email;
 
     public String getName() {
