@@ -1,12 +1,16 @@
 package com.backend.backend.controllers;
 
 import com.backend.backend.dto.UserDto;
+import com.backend.backend.models.LoginForm;
 import com.backend.backend.models.User;
 import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.services.UserService;
 import com.backend.backend.validation.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
@@ -27,7 +31,9 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> findAllUsers() {
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> findAllUsers(final HttpServletRequest request, Authentication authentication) {
+//        System.out.println("auth: " + authentication.getName());
         return userRepository.findAll();
     }
 
@@ -36,12 +42,9 @@ public class UserController {
         return userRepository.findUserAll();
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "{test: test}";
-    }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<User> findUserById(@PathVariable(value = "id") long id) {
         Optional<User> user = userRepository.findById(id);
 
@@ -67,4 +70,6 @@ public class UserController {
 
         return registered;
     }
+
+
 }

@@ -1,17 +1,39 @@
 <form
   [formGroup]="form"
   (ngSubmit)="onSubmit()"
-  class="flex items-center justify-center"
+  class="flex items-center justify-center pt-10"
 >
-  <div class="w-1/2 flex flex-col">
+  <div class="w-1/4 flex flex-col gap-y-2">
+    <div class="text-xl">Create new account</div>
+    <ng-container *ngFor="let error of serverErrors">
+      <div
+        *ngIf="error.object === 'userDto'"
+        class="text-red-600 font-semibold"
+      >
+        {{ error.defaultMessage }}
+      </div>
+    </ng-container>
+    <div *ngIf="emailError" class="text-red-600 font-semibold">
+      {{ emailError }}
+    </div>
     <div class="flex flex-col">
       <label>Email</label>
       <input pInputText formControlName="email" type="email" />
+      <ng-container *ngFor="let error of serverErrors">
+        <div *ngIf="error.field === 'email'" class="text-red-600 font-semibold">
+          {{ error.defaultMessage }}
+        </div>
+      </ng-container>
     </div>
 
     <div class="flex flex-col">
       <label>Name</label>
       <input pInputText formControlName="name" type="text" />
+      <ng-container *ngFor="let error of serverErrors">
+        <div *ngIf="error.field === 'name'" class="text-red-600 font-semibold">
+          {{ error.defaultMessage }}
+        </div>
+      </ng-container>
     </div>
 
     <div class="flex flex-col">
@@ -23,6 +45,14 @@
         [feedback]="false"
         type="password"
       />
+      <ng-container *ngFor="let error of serverErrors">
+        <div
+          *ngIf="error.field === 'password'"
+          class="text-red-600 font-semibold"
+        >
+          {{ error.defaultMessage }}
+        </div>
+      </ng-container>
     </div>
 
     <div class="flex flex-col">
@@ -30,12 +60,20 @@
       <input
         pPassword
         class="w-full"
-        formControlName="passwordConfirmation"
+        formControlName="matchingPassword"
         [feedback]="false"
         type="password"
       />
+      <ng-container *ngFor="let error of serverErrors">
+        <div
+          *ngIf="error.field === 'matchingPassword'"
+          class="text-red-600 font-semibold"
+        >
+          {{ error.defaultMessage }}
+        </div>
+      </ng-container>
     </div>
 
-    <button pButton label="Register"></button>
+    <button pButton label="Register" [loading]="loading"></button>
   </div>
 </form>

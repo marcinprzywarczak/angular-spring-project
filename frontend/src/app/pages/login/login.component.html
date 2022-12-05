@@ -1,0 +1,60 @@
+<div class="w-full h-full flex items-center justify-center pt-20">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="flex flex-col gap-y-2 w-1/4"
+  >
+    <div *ngIf="serverError" class="text-red-600">
+      {{ serverError }}
+    </div>
+    <div class="flex flex-col">
+      <label>Email</label>
+      <input pInputText formControlName="login" />
+      <div
+        *ngIf="
+          submitted ||
+          form.controls['login'].touched ||
+          form.controls['login'].dirty
+        "
+      >
+        <div
+          *ngIf="form.controls['login'].errors?.['required']"
+          class="text-red-600"
+        >
+          Email is required!
+        </div>
+        <div
+          *ngIf="form.controls['login'].errors?.['email']"
+          class="text-red-600"
+        >
+          Email is wrong!
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col">
+      <label>Password</label>
+      <input
+        pPassword
+        formControlName="password"
+        [feedback]="false"
+        type="password"
+      />
+      <div
+        *ngIf="
+          submitted ||
+          form.controls['password'].touched ||
+          form.controls['password'].dirty
+        "
+      >
+        <div
+          *ngIf="form.controls['password'].errors?.['required']"
+          class="text-red-600"
+        >
+          Password is required!
+        </div>
+      </div>
+    </div>
+    <button pButton label="Login" [loading]="loading"></button>
+  </form>
+</div>
