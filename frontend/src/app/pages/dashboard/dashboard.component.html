@@ -1,2 +1,10 @@
 <div *ngIf="isLogged">Hello {{ name }}! Nice to see you again!</div>
 <button *ngIf="isLogged" pButton label="Logout" (click)="logout()"></button>
+<div
+  *ngIf="!isLogged"
+  class="flex items-center justify-center flex-row gap-x-2 pt-20"
+>
+  <button pButton label="Login" [routerLink]="['login']"></button>
+  <div>OR</div>
+  <button pButton label="Register" [routerLink]="['register']"></button>
+</div>

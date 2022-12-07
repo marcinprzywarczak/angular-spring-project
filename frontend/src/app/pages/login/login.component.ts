@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('isLogged', 'true');
           localStorage.setItem('user', user.email);
           localStorage.setItem('name', user.name);
-          this.router.navigate(['']);
+          window.location.href = '';
         },
         error: (err) => {
           if (err.status === 400) this.serverError = err.error.message;

@@ -1,0 +1,93 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="flex items-center justify-center w-full"
+>
+  <div class="flex flex-col gap-y-2 w-full">
+    <ng-container *ngFor="let error of serverErrors">
+      <div
+        *ngIf="error.object === 'userDto'"
+        class="text-red-600 font-semibold"
+      >
+        {{ error.defaultMessage }}
+      </div>
+    </ng-container>
+    <div *ngIf="emailError" class="text-red-600 font-semibold">
+      {{ emailError }}
+    </div>
+    <div class="flex flex-col">
+      <label>Email</label>
+      <input pInputText formControlName="email" type="email" />
+      <ng-container *ngFor="let error of serverErrors">
+        <div *ngIf="error.field === 'email'" class="text-red-600 font-semibold">
+          {{ error.defaultMessage }}
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="flex flex-col">
+      <label>Name</label>
+      <input pInputText formControlName="name" type="text" />
+      <ng-container *ngFor="let error of serverErrors">
+        <div *ngIf="error.field === 'name'" class="text-red-600 font-semibold">
+          {{ error.defaultMessage }}
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="flex flex-col">
+      <label>Password</label>
+      <input
+        pPassword
+        class="w-full"
+        formControlName="password"
+        [feedback]="false"
+        type="password"
+      />
+      <ng-container *ngFor="let error of serverErrors">
+        <div
+          *ngIf="error.field === 'password'"
+          class="text-red-600 font-semibold"
+        >
+          {{ error.defaultMessage }}
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="flex flex-col">
+      <label>Password confirmation</label>
+      <input
+        pPassword
+        class="w-full"
+        formControlName="matchingPassword"
+        [feedback]="false"
+        type="password"
+      />
+      <ng-container *ngFor="let error of serverErrors">
+        <div
+          *ngIf="error.field === 'matchingPassword'"
+          class="text-red-600 font-semibold"
+        >
+          {{ error.defaultMessage }}
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="flex flex-col pb-2">
+      <label>Roles</label>
+      <p-multiSelect
+        [options]="userRolesOptions"
+        optionValue="name"
+        optionLabel="name"
+        appendTo="body"
+        styleClass="w-full"
+        formControlName="role"
+        [showClear]="true"
+        placeholder="Select roles"
+        [filter]="false"
+      ></p-multiSelect>
+    </div>
+
+    <button pButton label="Register" [loading]="loading"></button>
+  </div>
+</form>

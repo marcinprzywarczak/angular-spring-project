@@ -9,12 +9,13 @@ import {
   HttpClientModule,
   HttpHandler,
 } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { httpInterceptorProviders } from './shared/interceptors/http-request.interceptor';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,11 +26,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     ToastModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
   ],
   providers: [
     httpInterceptorProviders,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     MessageService,
+    DialogService,
   ],
   bootstrap: [AppComponent],
 })

@@ -1,12 +1,18 @@
 package com.backend.backend.controllers;
 
+import com.backend.backend.dto.NewUserDto;
 import com.backend.backend.dto.UserDto;
+import com.backend.backend.models.Filter;
 import com.backend.backend.models.LoginForm;
+import com.backend.backend.models.Role;
 import com.backend.backend.models.User;
+import com.backend.backend.repositories.RoleRepository;
 import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.services.UserService;
 import com.backend.backend.validation.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -30,11 +36,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleRepository roleRepository;
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public List<User> findAllUsers(final HttpServletRequest request, Authentication authentication) {
 //        System.out.println("auth: " + authentication.getName());
         return userRepository.findAll();
+    }
+
+    @PostMapping("/filterUser")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<User> filterUser(final HttpServletRequest request, Authentication authentication, @RequestBody Filter filter) {
+//        System.out.println("auth: " + authentication.getName());
+        return userService.getUserFilter(filter);
     }
 
     @GetMapping("/all")
@@ -69,6 +84,22 @@ public class UserController {
 
 
         return registered;
+    }
+
+    @PostMapping("/addNewUser")
+    @PreAuthorize("hasRole('ADMIN')")
+    public User addNewUser(@Valid @RequestBody NewUserDto newUserDto,
+                           HttpServletRequest request,
+                           Errors errors){
+
+        User registered = userService.addNewUserAccount(newUserDto);
+        return registered;
+    }
+
+    @GetMapping("/roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Role> getUserRole() {
+        return this.roleRepository.findAll();
     }
 
 

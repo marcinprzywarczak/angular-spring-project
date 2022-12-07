@@ -21,9 +21,9 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.name = this.userService.getName();
     this.isLogged = this.userService.getState();
-    this.http.get(`${environment.apiUrl}/api/user`).subscribe((res) => {
-      console.log(res);
-    });
+    // this.http.get(`${environment.apiUrl}/api/user`).subscribe((res) => {
+    //   console.log(res);
+    // });
   }
 
   logout() {
