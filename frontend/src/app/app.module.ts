@@ -12,10 +12,11 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { httpInterceptorProviders } from './shared/interceptors/http-request.interceptor';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogService } from 'primeng/dynamicdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,12 +28,14 @@ import { DialogService } from 'primeng/dynamicdialog';
     ToastModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    ConfirmPopupModule,
   ],
   providers: [
     httpInterceptorProviders,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     MessageService,
     DialogService,
+    ConfirmationService,
   ],
   bootstrap: [AppComponent],
 })

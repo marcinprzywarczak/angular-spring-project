@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -31,6 +32,7 @@ public class DataLoader implements ApplicationRunner {
 
     //add admin user if not already exists
     public void run(ApplicationArguments args) {
+        this.addRoles();
         if(userRepository.findByEmail("admin@test.com") != null)
             return;
         User user = new User();
@@ -42,5 +44,20 @@ public class DataLoader implements ApplicationRunner {
         roles.add(adminRole);
         user.setRoles(roles);
         userRepository.save(user);
+    }
+
+    public void addRoles() {
+        Optional<Role> role = this.roleRepository.findByName(ERole.ROLE_ADMIN);
+        if(!role.isPresent()) {
+            Role addRole = new Role();
+            addRole.setName(ERole.ROLE_ADMIN);
+            this.roleRepository.save(addRole);
+        }
+        role = this.roleRepository.findByName(ERole.ROLE_USER);
+        if(!role.isPresent()) {
+            Role addRole = new Role();
+            addRole.setName(ERole.ROLE_USER);
+            this.roleRepository.save(addRole);
+        }
     }
 }

@@ -1,0 +1,26 @@
+<div class="w-full flex flex-col items-center" *ngIf="list">
+  <div>{{ list.name }}</div>
+  <div>{{ list.description }}</div>
+  <div class="flex flex-col">
+    <div
+      class="w-full flex flex-row justify-between py-2"
+      *ngFor="let item of list.toDoListItemSet; let i = index"
+    >
+      <div [ngClass]="item.done ? 'line-through' : ''">
+        {{ i + 1 }}. {{ item.name }}
+      </div>
+      <div class="flex flex-row gap-x-2">
+        <i
+          class="pi"
+          [ngClass]="item.done ? 'pi-times' : 'pi-check'"
+          (click)="checkAsDone(item.id, !item.done)"
+        ></i>
+        <i class="pi pi-trash" (click)="deleteItem(item.id)"></i>
+      </div>
+    </div>
+    <div class="flex flex-row">
+      <input pInputText [(ngModel)]="newItem" />
+      <button pButton label="Add" (click)="addNewItem()"></button>
+    </div>
+  </div>
+</div>

@@ -6,9 +6,14 @@ import { Subject } from 'rxjs';
 })
 export class DataReloadTriggerService {
   userReloadTrigger = new Subject<boolean>();
+  listReloadTrigger = new Subject<boolean>();
   constructor() {}
 
   triggerUserReload() {
     this.userReloadTrigger.next(true);
+  }
+
+  triggerListReload() {
+    this.listReloadTrigger.next(true);
   }
 }

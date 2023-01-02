@@ -1,0 +1,39 @@
+<div
+  (mouseover)="hover = true"
+  (mouseleave)="hover = false"
+  class="p-10 rounded-md text-center cursor-pointer relative"
+  [ngStyle]="{
+    'background-color': hover ? hoverBgColor : list.color,
+    color: list.text_color,
+    'border-width': '3px',
+    'border-color': list.color,
+    'border-style': 'solid'
+  }"
+>
+  <div class="w-full h-full flex flex-col rounded-md">
+    <div>{{ list.name }}</div>
+    <div>{{ list.user.email }}</div>
+  </div>
+  <div class="absolute top-0.5 right-0.5" appClickStopPropagation>
+    <div class="flex flex-row">
+      <i
+        class="pi pi-pencil p-2"
+        (click)="edit()"
+        (mouseover)="editButtonHover = true"
+        (mouseleave)="editButtonHover = false"
+        [ngStyle]="{
+          color: editButtonHover ? hoverTextColor : list.text_color
+        }"
+      ></i>
+      <i
+        class="pi pi-trash p-2"
+        (click)="confirm($event)"
+        (mouseover)="deleteButtonHover = true"
+        (mouseleave)="deleteButtonHover = false"
+        [ngStyle]="{
+          color: deleteButtonHover ? hoverTextColor : list.text_color
+        }"
+      ></i>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="flex flex-col w-full">
+    <div class="flex flex-col">
+      <label>Name</label>
+      <input pInputText formControlName="name" />
+    </div>
+    <div class="flex flex-col">
+      <label>Description</label>
+      <input pInputText formControlName="description" />
+    </div>
+    <div class="flex flex-wrap space-x-2">
+      <div class="flex flex-col">
+        <label>List color</label>
+        <p-colorPicker formControlName="color" [inline]="true"></p-colorPicker>
+      </div>
+
+      <div class="flex flex-col">
+        <label>Text color</label>
+        <p-colorPicker
+          formControlName="text_color"
+          [inline]="true"
+        ></p-colorPicker>
+      </div>
+    </div>
+
+    <button pButton [label]="isEdit ? 'Update' : 'Add'"></button>
+  </div>
+</form>

@@ -20,6 +20,19 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'lists',
+    loadChildren: () =>
+      import('./pages/lists/lists.module').then((m) => m.ListsModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'list/:id',
+    loadChildren: () =>
+      import('./pages/list-details/list-details.module').then(
+        (m) => m.ListDetailsModule
+      ),
+  },
+  {
     path: '',
     loadChildren: () =>
       import('./pages/dashboard/dashboard.module').then(

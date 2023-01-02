@@ -1,5 +1,9 @@
 package com.backend.backend.security;
 
+import com.backend.backend.models.ToDoList;
+import com.backend.backend.models.User;
+import com.backend.backend.repositories.ToDoListRepository;
+import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.security.jwt.AuthEntryPointJwt;
 import com.backend.backend.security.jwt.AuthTokenFilter;
 import com.backend.backend.security.services.UserDetailsServiceImpl;
@@ -14,6 +18,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,6 +28,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -69,6 +76,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/api/toDoList/**").permitAll()
                 .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
@@ -85,10 +93,12 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("*"));
         //or any domain that you want to restrict to
         configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept","Authorization"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
         //Add the method support as you like
         UrlBasedCorsConfigurationSource source = new     UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
 }

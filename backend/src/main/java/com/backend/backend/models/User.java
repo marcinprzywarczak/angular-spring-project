@@ -1,5 +1,7 @@
 package com.backend.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -10,9 +12,10 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private long id;
     private String name;
-
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String password;
@@ -23,12 +26,16 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public String getEmail() {
-        return email;
-    }
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference(value = "toDoList-user")
+    private Set<ToDoList> toDoLists;
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
@@ -63,4 +70,12 @@ public class User {
         this.roles = roles;
     }
 
+
+    public Set<ToDoList> getToDoLists() {
+        return toDoLists;
+    }
+
+    public void setToDoLists(Set<ToDoList> toDoLists) {
+        this.toDoLists = toDoLists;
+    }
 }
