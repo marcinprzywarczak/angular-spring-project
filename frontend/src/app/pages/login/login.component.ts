@@ -47,9 +47,10 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (user) => {
           localStorage.setItem('isLogged', 'true');
-          localStorage.setItem('user', user.email);
+          localStorage.setItem('email', user.email);
           localStorage.setItem('name', user.name);
-          window.location.href = '';
+          localStorage.setItem('user', JSON.stringify(user));
+          window.location.href = '/lists';
         },
         error: (err) => {
           if (err.status === 400) this.serverError = err.error.message;

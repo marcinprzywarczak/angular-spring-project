@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { ForbiddenPageComponent } from './pages/forbidden-page/forbidden-page.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
       import('./pages/list-details/list-details.module').then(
         (m) => m.ListDetailsModule
       ),
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenPageComponent,
   },
   {
     path: '',

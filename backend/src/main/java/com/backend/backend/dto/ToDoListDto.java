@@ -1,12 +1,20 @@
 package com.backend.backend.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+
 public class ToDoListDto {
+    @NotBlank(message = "Name is required!")
     private String name;
 
+    @NotBlank(message = "Color is required!")
     private String color;
 
+    @NotBlank(message = "Text color is required!")
     private String text_color;
 
+    @NotBlank(message = "Description is required!")
     private String description;
 
     public String getName() {

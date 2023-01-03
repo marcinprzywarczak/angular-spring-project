@@ -69,7 +69,7 @@ export class AddListDialogComponent implements OnInit, AfterViewInit {
       },
       error: (err) => {
         this.alertService.showError('Error while adding new list.');
-        console.log('err', err);
+        console.log('err', JSON.parse(err.error.message));
       },
     });
   }

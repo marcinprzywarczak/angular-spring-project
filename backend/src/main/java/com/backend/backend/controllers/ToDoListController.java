@@ -3,6 +3,7 @@ package com.backend.backend.controllers;
 import com.backend.backend.dto.ToDoListDto;
 import com.backend.backend.dto.ToDoListItemDao;
 import com.backend.backend.dto.ToDoListUserDto;
+import com.backend.backend.mail.EmailService;
 import com.backend.backend.models.ToDoList;
 import com.backend.backend.models.ToDoListItem;
 import com.backend.backend.models.User;
@@ -18,7 +19,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.swing.text.html.Option;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,11 +38,14 @@ public class ToDoListController {
     private UserRepository userRepository;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private ToDoListItemRepository toDoListItemRepository;
 
     @PostMapping("/add")
     @PreAuthorize("isAuthenticated()")
-    public ToDoList addNewList(Authentication authentication, @RequestBody ToDoListDto toDoListDto) {
+    public ToDoList addNewList(Authentication authentication,@Valid @RequestBody ToDoListDto toDoListDto) {
         User auth = userRepository.findByEmail(authentication.getName());
 
         ToDoList toDoList = new ToDoList();
@@ -96,7 +102,7 @@ public class ToDoListController {
     @PutMapping("/update/{id}")
     @PreAuthorize("isAuthenticated() and @userSecurity.userIsAuthorOfList(authentication, #id)")
     public ResponseEntity<?> updateToDoList(@PathVariable(value = "id") long id, Authentication authentication,
-                                            @RequestBody ToDoListDto toDoListDto) {
+                                            @RequestBody @Valid ToDoListDto toDoListDto) {
         Optional<ToDoList> toDoList = toDoListRepository.findById(id);
         if(toDoList.isPresent()) {
             ToDoList toDoListEdit = toDoList.get();
@@ -163,6 +169,11 @@ public class ToDoListController {
         else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/mail")
+    public void sendMail() throws MessagingException {
+        this.emailService.sendMail();
     }
 
 }

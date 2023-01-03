@@ -60,4 +60,10 @@ export class ListsComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+  sendEmail() {
+    this.listApiService.email().subscribe((res) => {
+      console.log(res);
+    });
+  }
 }

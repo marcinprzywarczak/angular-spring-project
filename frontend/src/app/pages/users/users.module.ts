@@ -12,7 +12,13 @@ import { PasswordModule } from 'primeng/password';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 
-const routes: Routes = [{ path: '', component: UsersComponent }];
+const routes: Routes = [
+  {
+    path: '',
+    component: UsersComponent,
+    data: { permissions: { only: ['ROLE_ADMIN'] } },
+  },
+];
 @NgModule({
   declarations: [UsersComponent, UserListComponent, UserDialogComponent],
   imports: [

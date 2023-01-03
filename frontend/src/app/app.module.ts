@@ -17,9 +17,13 @@ import { ToastModule } from 'primeng/toast';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { SharedModule } from './shared/shared.module';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { ForbiddenPageComponent } from './pages/forbidden-page/forbidden-page.component';
+import { ForbiddenInterceptor } from './shared/interceptors/forbidden.interceptor';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ForbiddenPageComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -29,10 +33,13 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     ConfirmPopupModule,
+    SharedModule,
+    NgxPermissionsModule.forRoot(),
   ],
   providers: [
     httpInterceptorProviders,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ForbiddenInterceptor, multi: true },
     MessageService,
     DialogService,
     ConfirmationService,

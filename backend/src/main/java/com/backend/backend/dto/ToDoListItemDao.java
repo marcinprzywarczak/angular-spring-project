@@ -1,7 +1,12 @@
 package com.backend.backend.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class ToDoListItemDao {
+
+    @NotBlank(message = "Name is required!")
     private String name;
+    @NotBlank(message = "Is done is required")
     private boolean isDone;
 
     public String getName() {

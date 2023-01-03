@@ -62,4 +62,8 @@ export class ListApiService {
       `${environment.apiUrl}/api/toDoList/deleteItem/${itemId}`
     );
   }
+
+  email() {
+    return this.http.get(`${environment.apiUrl}/api/toDoList/mail`);
+  }
 }
