@@ -101,10 +101,7 @@ public class UserService {
 
         Pageable pageable = PageRequest.of(page, filter.getRows(), Sort.by(filter.getSortOrder() == 1 ? Sort.Direction.ASC : Sort.Direction.DESC, filter.getSortField()));
         if(filter.getGlobalFilter() == null) {
-            Page<User> page1 =  userRepository.findAll(pageable);
-            page1.stream().se
-            page1 = page1.stream().distinct();
-            return
+            return  userRepository.findAll(pageable);
         }
         else {
             long id = 0;

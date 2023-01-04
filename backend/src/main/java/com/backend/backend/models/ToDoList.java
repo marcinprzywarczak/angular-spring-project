@@ -39,6 +39,7 @@ public class ToDoList {
 
     @OneToMany(mappedBy = "toDoList", cascade = CascadeType.REMOVE)
     @JsonManagedReference
+    @OrderBy(value = "id")
     private Set<ToDoListItem> toDoListItemSet;
 
     public Set<ToDoListItem> getToDoListItemSet() {
