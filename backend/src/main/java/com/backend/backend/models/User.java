@@ -1,5 +1,6 @@
 package com.backend.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -24,11 +25,24 @@ public class User {
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @OrderBy(value = "id")
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(mappedBy = "users")
+    @JsonBackReference
+    private Set<ToDoList> toDoLists = new HashSet<>();
+
+    public Set<ToDoList> getToDoLists() {
+        return toDoLists;
+    }
+
+    public void setToDoLists(Set<ToDoList> toDoLists) {
+        this.toDoLists = toDoLists;
+    }
+
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference(value = "toDoList-user")
-    private Set<ToDoList> toDoLists;
+    @JsonBackReference(value = "toDoList-user")
+    private Set<ToDoList> userToDoLists;
 
     public void setEmail(String email) {
         this.email = email;
@@ -71,11 +85,11 @@ public class User {
     }
 
 
-    public Set<ToDoList> getToDoLists() {
-        return toDoLists;
+    public Set<ToDoList> getUserToDoLists() {
+        return userToDoLists;
     }
 
-    public void setToDoLists(Set<ToDoList> toDoLists) {
-        this.toDoLists = toDoLists;
+    public void setUserToDoLists(Set<ToDoList> userToDoLists) {
+        this.userToDoLists = userToDoLists;
     }
 }

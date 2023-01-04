@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,12 +28,17 @@ public class ToDoList {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference(value = "toDoList-user")
+    @JsonManagedReference(value = "toDoList-user")
     private User user;
 
-    @OneToMany(mappedBy = "toDoList")
-    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "lists_users", joinColumns = @JoinColumn(name = "todo_list_id"),
+    inverseJoinColumns = @JoinColumn(name = "user_id"))
     @OrderBy(value = "id")
+    private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "toDoList", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     private Set<ToDoListItem> toDoListItemSet;
 
     public Set<ToDoListItem> getToDoListItemSet() {
@@ -73,6 +79,15 @@ public class ToDoList {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     public String getDescription() {

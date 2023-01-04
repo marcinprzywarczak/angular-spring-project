@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { ListCardComponent } from './components/list-card/list-card.component';
 import { SharedModule } from '../../shared/shared.module';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 const routes: Routes = [{ path: '', component: ListsComponent }];
 @NgModule({
@@ -21,6 +22,7 @@ const routes: Routes = [{ path: '', component: ListsComponent }];
     ButtonModule,
     ColorPickerModule,
     SharedModule,
+    MultiSelectModule,
   ],
 })
 export class ListsModule {}

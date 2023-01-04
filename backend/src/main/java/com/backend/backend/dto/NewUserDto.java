@@ -8,7 +8,6 @@ import java.util.Set;
 
 @PasswordMatches
 public class NewUserDto extends UserDto {
-    @NotBlank(message = "Role is required")
     private Set<String> role;
 
 

@@ -39,7 +39,6 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public List<User> findAllUsers(final HttpServletRequest request, Authentication authentication) {
 //        System.out.println("auth: " + authentication.getName());
         return userRepository.findAll();

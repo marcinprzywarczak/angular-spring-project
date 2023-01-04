@@ -29,10 +29,19 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th *ngFor="let column of columns" [pSortableColumn]="column">
-        {{ column }}
-        <p-sortIcon [field]="column"></p-sortIcon>
-      </th>
+      <ng-container *ngFor="let column of columns">
+        <ng-container *ngIf="column !== 'roles'; else columnWithoutSort">
+          <th [pSortableColumn]="column">
+            {{ column }}
+            <p-sortIcon [field]="column"></p-sortIcon>
+          </th>
+        </ng-container>
+        <ng-template #columnWithoutSort>
+          <th>
+            {{ column }}
+          </th>
+        </ng-template>
+      </ng-container>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-user>

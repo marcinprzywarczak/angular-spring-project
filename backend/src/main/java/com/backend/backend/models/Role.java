@@ -13,12 +13,16 @@ public class Role {
     @Column(length = 20)
     private ERole name;
 
+    @Column(name = "name", updatable = false, insertable = false)
+    private String nameString;
+
     public Role() {
 
     }
 
     public Role(ERole name) {
         this.name = name;
+        this.nameString = name.toString();
     }
 
     public Integer getId() {
@@ -35,5 +39,13 @@ public class Role {
 
     public void setName(ERole name) {
         this.name = name;
+    }
+
+    public String getNameString() {
+        return nameString;
+    }
+
+    public void setNameString(String nameString) {
+        this.nameString = nameString;
     }
 }

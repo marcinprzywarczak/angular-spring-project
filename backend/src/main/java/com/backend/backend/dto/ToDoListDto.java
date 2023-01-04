@@ -3,6 +3,7 @@ package com.backend.backend.dto;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.Set;
 
 public class ToDoListDto {
     @NotBlank(message = "Name is required!")
@@ -16,6 +17,16 @@ public class ToDoListDto {
 
     @NotBlank(message = "Description is required!")
     private String description;
+
+    private Set<String> users;
+
+    public Set<String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<String> users) {
+        this.users = users;
+    }
 
     public String getName() {
         return name;

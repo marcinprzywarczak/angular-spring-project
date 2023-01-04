@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -99,18 +100,21 @@ public class UserService {
         int page = filter.getFirst() / filter.getRows();
 
         Pageable pageable = PageRequest.of(page, filter.getRows(), Sort.by(filter.getSortOrder() == 1 ? Sort.Direction.ASC : Sort.Direction.DESC, filter.getSortField()));
-        System.out.println(filter.getGlobalFilter());
-        if(filter.getGlobalFilter() == null)
-            return userRepository.findAll(pageable);
+        if(filter.getGlobalFilter() == null) {
+            Page<User> page1 =  userRepository.findAll(pageable);
+            page1.stream().se
+            page1 = page1.stream().distinct();
+            return
+        }
         else {
             long id = 0;
             try{
                 id = Long.parseLong(filter.getGlobalFilter());
 
             } catch (NumberFormatException e) {
-                return userRepository.findByEmailContainingOrNameContaining(filter.getGlobalFilter(),filter.getGlobalFilter(), pageable);
+                return userRepository.findDistinctByEmailContainingOrNameContainingOrRolesNameStringContaining(filter.getGlobalFilter(),filter.getGlobalFilter(), filter.getGlobalFilter(), pageable);
             }
-            return userRepository.findByEmailContainingOrNameContainingOrId(filter.getGlobalFilter(), filter.getGlobalFilter(), id, pageable);
+            return userRepository.findDistinctByEmailContainingOrNameContainingOrId(filter.getGlobalFilter(), filter.getGlobalFilter(), id, pageable);
         }
     }
 }

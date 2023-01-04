@@ -32,6 +32,7 @@ const routes: Routes = [
       import('./pages/list-details/list-details.module').then(
         (m) => m.ListDetailsModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'forbidden',

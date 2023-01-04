@@ -6,6 +6,8 @@ import { ListApiService } from '../../../../shared/services/list-api.service';
 import { DataReloadTriggerService } from '../../../../shared/services/data-reload-trigger.service';
 import { AlertService } from '../../../../shared/services/alert.service';
 import { ConfirmationService } from 'primeng/api';
+import { User } from '../../../../shared/models/user';
+import { UserService } from '../../../../shared/services/user.service';
 
 @Component({
   selector: 'app-list-card',
@@ -19,15 +21,18 @@ export class ListCardComponent implements OnInit {
   hover: boolean = false;
   editButtonHover: boolean = false;
   deleteButtonHover: boolean = false;
+  loginUser: User;
   constructor(
     private dialogService: DialogService,
     private listApiService: ListApiService,
     private dataReloadTriggerService: DataReloadTriggerService,
     private alertService: AlertService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
+    this.loginUser = this.userService.getUser();
     this.hoverBgColor = this.hexToRGB(this.list.color, 0.8);
     this.hoverTextColor = this.hexToRGB(this.list.text_color, 0.7);
   }

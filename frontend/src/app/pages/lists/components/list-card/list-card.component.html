@@ -11,10 +11,20 @@
   }"
 >
   <div class="w-full h-full flex flex-col rounded-md">
-    <div>{{ list.name }}</div>
-    <div>{{ list.user.email }}</div>
+    <div class="font-semibold">{{ list.name }}</div>
+    <div>Author: {{ list.user.email }}</div>
+    <div>Belongs users:</div>
+    <div *ngFor="let user of list.users">{{ user.email }}</div>
+    <!--    <div>{{ list.user.email }}</div>-->
   </div>
-  <div class="absolute top-0.5 right-0.5" appClickStopPropagation>
+  <div
+    *ngIf="
+      list.user.email === loginUser.email ||
+      loginUser.roles.includes('ROLE_ADMIN')
+    "
+    class="absolute top-0.5 right-0.5"
+    appClickStopPropagation
+  >
     <div class="flex flex-row">
       <i
         class="pi pi-pencil p-2"
@@ -36,4 +46,5 @@
       ></i>
     </div>
   </div>
+  <div class="absolute top-0.5 left-0.5 text-sm">Id: {{ list.id }}</div>
 </div>
