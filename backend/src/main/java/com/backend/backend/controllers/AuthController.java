@@ -10,6 +10,8 @@ import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.security.jwt.JwtUtils;
 import com.backend.backend.security.services.UserDetailsImpl;
 import com.backend.backend.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,8 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

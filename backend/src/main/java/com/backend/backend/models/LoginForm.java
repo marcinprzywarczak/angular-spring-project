@@ -1,6 +1,7 @@
 package com.backend.backend.models;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
+
 
 public class LoginForm {
     @NotBlank(message = "Email is required!")

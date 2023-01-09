@@ -2,7 +2,7 @@ package com.backend.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "todo_list_item")

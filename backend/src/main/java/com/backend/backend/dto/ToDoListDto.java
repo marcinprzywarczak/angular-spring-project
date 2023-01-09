@@ -1,8 +1,8 @@
 package com.backend.backend.dto;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.NotBlank;
+
+
 import java.util.Set;
 
 public class ToDoListDto {

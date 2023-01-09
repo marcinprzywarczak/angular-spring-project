@@ -8,6 +8,7 @@ import com.backend.backend.payload.MessageResponse;
 import com.backend.backend.repositories.RoleRepository;
 import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.validation.UserAlreadyExistException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service

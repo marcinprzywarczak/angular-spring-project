@@ -2,10 +2,7 @@ package com.backend.backend.dto;
 
 import com.backend.backend.validation.PasswordMatches;
 import com.backend.backend.validation.ValidEmail;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
 
 @PasswordMatches
 public class UserDto {

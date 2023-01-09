@@ -1,6 +1,7 @@
 package com.backend.backend.dto;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
+
 
 public class ToDoListItemDao {
 

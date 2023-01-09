@@ -3,7 +3,7 @@ package com.backend.backend.dto;
 import com.backend.backend.validation.PasswordMatches;
 import com.backend.backend.validation.ValidEmail;
 
-import javax.validation.constraints.NotBlank;
+
 import java.util.Set;
 
 @PasswordMatches

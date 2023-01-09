@@ -7,6 +7,7 @@ import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.security.jwt.AuthEntryPointJwt;
 import com.backend.backend.security.jwt.AuthTokenFilter;
 import com.backend.backend.security.services.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,10 +35,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 @EnableWebSecurity
-@EnableMethodSecurity(
-        prePostEnabled = true)
-@ComponentScan(basePackages = { "com.backend.backend.services" , "com.backend.backend.spring" })
 @Configuration
+@EnableMethodSecurity(
+        securedEnabled = true,
+        prePostEnabled = true,
+        proxyTargetClass = true)
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     @Autowired
@@ -74,16 +77,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/user/**").permitAll()
-                .antMatchers("/api/toDoList/**").permitAll()
-                .anyRequest().authenticated();
+                .authorizeHttpRequests().requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/user/**").permitAll()
+                .requestMatchers("/api/toDoList/**").permitAll()
+                .anyRequest().authenticated().and();
 
         http.authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and().exceptionHandling().accessDeniedHandler(unauthorizedHandler);
 
         return http.build();
     }

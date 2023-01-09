@@ -10,6 +10,8 @@ import com.backend.backend.repositories.ToDoListRepository;
 import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.services.UserService;
 import com.backend.backend.validation.UserAlreadyExistException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -24,8 +26,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -53,7 +54,7 @@ public class UserController {
 
     @PostMapping("/filterUser")
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<User> filterUser(final HttpServletRequest request, Authentication authentication, @RequestBody Filter filter) {
+    public Page<User> filterUser(@RequestBody Filter filter) {
         return userService.getUserFilter(filter);
     }
 

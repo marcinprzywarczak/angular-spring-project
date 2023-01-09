@@ -1,8 +1,8 @@
 package com.backend.backend.dto;
 
 import com.backend.backend.validation.ValidEmail;
+import jakarta.validation.constraints.NotBlank;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 public class UpdateUserDto {

@@ -1,8 +1,8 @@
 package com.backend.backend.validation;
 import com.backend.backend.dto.UserDto;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 public class PasswordMatchesValidator
         implements ConstraintValidator<PasswordMatches, Object> {

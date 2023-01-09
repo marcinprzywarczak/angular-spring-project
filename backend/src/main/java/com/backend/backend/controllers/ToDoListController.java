@@ -10,6 +10,8 @@ import com.backend.backend.payload.MessageResponse;
 import com.backend.backend.repositories.ToDoListItemRepository;
 import com.backend.backend.repositories.ToDoListRepository;
 import com.backend.backend.repositories.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
@@ -19,9 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
-import javax.swing.text.html.Option;
-import javax.validation.Valid;
+
 import java.util.*;
 
 @RestController
@@ -168,7 +168,7 @@ public class ToDoListController {
     }
 
     @GetMapping("/mail")
-    public void sendMail() throws MessagingException {
+    public void sendMail() {
         this.emailService.sendMail();
     }
 
