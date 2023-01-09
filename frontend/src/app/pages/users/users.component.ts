@@ -15,6 +15,9 @@ export class UsersComponent implements OnInit {
     this.dialogService.open(UserDialogComponent, {
       header: 'Add new user',
       width: '50rem',
+      data: {
+        edit: false,
+      },
     });
   }
 }

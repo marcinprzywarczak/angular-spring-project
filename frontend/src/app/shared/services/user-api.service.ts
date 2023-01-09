@@ -6,6 +6,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { JavaPageable } from '../models/java-pageable';
 import { RegisterUser } from '../models/registerUser';
 import { AddNewUser } from '../models/addNewUser';
+import { UpdateUser } from '../models/updateUser';
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +32,16 @@ export class UserApiService {
       `${environment.apiUrl}/api/user/addNewUser`,
       addNewUser
     );
+  }
+
+  updateUser(updateUser: UpdateUser) {
+    return this.http.put(
+      `${environment.apiUrl}/api/user/${updateUser.id}/updateUser`,
+      updateUser
+    );
+  }
+
+  deleteUser(id: number) {
+    return this.http.delete(`${environment.apiUrl}/api/user/${id}/delete`);
   }
 }

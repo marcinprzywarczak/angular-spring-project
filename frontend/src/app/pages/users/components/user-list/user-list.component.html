@@ -31,17 +31,18 @@
     <tr>
       <ng-container *ngFor="let column of columns">
         <ng-container *ngIf="column !== 'roles'; else columnWithoutSort">
-          <th [pSortableColumn]="column">
+          <th [pSortableColumn]="column" class="uppercase">
             {{ column }}
             <p-sortIcon [field]="column"></p-sortIcon>
           </th>
         </ng-container>
         <ng-template #columnWithoutSort>
-          <th>
+          <th class="uppercase">
             {{ column }}
           </th>
         </ng-template>
       </ng-container>
+      <th class="w-2"></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-user>
@@ -54,6 +55,24 @@
         </td>
         <td *ngIf="column !== 'roles'">{{ user[column] }}</td>
       </ng-container>
+      <td>
+        <div class="flex items-center justify-center gap-x-2">
+          <div
+            class="hover:bg-gray-200 hover:text-gray-800 rounded-md cursor-pointer"
+            (click)="editUser(user)"
+          >
+            <i class="pi pi-pencil p-2"></i>
+          </div>
+          <div
+            *ngIf="loggedUser.id !== user.id"
+            class="hover:bg-gray-200 hover:text-gray-800 rounded-md cursor-pointer"
+            (click)="deleteUser(user)"
+          >
+            <i class="pi pi-trash p-2"></i>
+          </div>
+        </div>
+      </td>
     </tr>
   </ng-template>
 </p-table>
+<p-confirmDialog></p-confirmDialog>

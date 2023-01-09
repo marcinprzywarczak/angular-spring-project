@@ -3,15 +3,57 @@
     <div class="flex flex-col">
       <label>Name</label>
       <input pInputText formControlName="name" />
+      <div
+        *ngIf="
+          submitted ||
+          form.controls['name'].touched ||
+          form.controls['name'].dirty
+        "
+      >
+        <div
+          *ngIf="form.controls['name'].errors?.['required']"
+          class="text-red-600"
+        >
+          name is required!
+        </div>
+      </div>
     </div>
     <div class="flex flex-col">
       <label>Description</label>
       <input pInputText formControlName="description" />
+      <div
+        *ngIf="
+          submitted ||
+          form.controls['description'].touched ||
+          form.controls['description'].dirty
+        "
+      >
+        <div
+          *ngIf="form.controls['description'].errors?.['required']"
+          class="text-red-600"
+        >
+          description is required!
+        </div>
+      </div>
     </div>
     <div class="flex flex-wrap space-x-2">
       <div class="flex flex-col">
         <label>List color</label>
         <p-colorPicker formControlName="color" [inline]="true"></p-colorPicker>
+        <div
+          *ngIf="
+            submitted ||
+            form.controls['color'].touched ||
+            form.controls['color'].dirty
+          "
+        >
+          <div
+            *ngIf="form.controls['color'].errors?.['required']"
+            class="text-red-600"
+          >
+            color is required!
+          </div>
+        </div>
       </div>
 
       <div class="flex flex-col">
@@ -20,6 +62,20 @@
           formControlName="text_color"
           [inline]="true"
         ></p-colorPicker>
+        <div
+          *ngIf="
+            submitted ||
+            form.controls['text_color'].touched ||
+            form.controls['text_color'].dirty
+          "
+        >
+          <div
+            *ngIf="form.controls['text_color'].errors?.['required']"
+            class="text-red-600"
+          >
+            text_color is required!
+          </div>
+        </div>
       </div>
     </div>
 
@@ -36,6 +92,20 @@
         placeholder="Select users"
         [filter]="false"
       ></p-multiSelect>
+      <div
+        *ngIf="
+          submitted ||
+          form.controls['users'].touched ||
+          form.controls['users'].dirty
+        "
+      >
+        <div
+          *ngIf="form.controls['users'].errors?.['required']"
+          class="text-red-600"
+        >
+          users is required!
+        </div>
+      </div>
     </div>
 
     <button pButton [label]="isEdit ? 'Update' : 'Add'"></button>

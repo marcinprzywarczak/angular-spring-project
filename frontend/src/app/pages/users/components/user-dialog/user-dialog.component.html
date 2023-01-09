@@ -23,6 +23,26 @@
           {{ error.defaultMessage }}
         </div>
       </ng-container>
+      <div
+        *ngIf="
+          submitted ||
+          form.controls['email'].touched ||
+          form.controls['email'].dirty
+        "
+      >
+        <div
+          *ngIf="form.controls['email'].errors?.['required']"
+          class="text-red-600"
+        >
+          Email is required!
+        </div>
+        <div
+          *ngIf="form.controls['email'].errors?.['email']"
+          class="text-red-600"
+        >
+          Email is wrong!
+        </div>
+      </div>
     </div>
 
     <div class="flex flex-col">
@@ -33,45 +53,89 @@
           {{ error.defaultMessage }}
         </div>
       </ng-container>
+      <div
+        *ngIf="
+          submitted ||
+          form.controls['name'].touched ||
+          form.controls['name'].dirty
+        "
+      >
+        <div
+          *ngIf="form.controls['name'].errors?.['required']"
+          class="text-red-600"
+        >
+          Name is required!
+        </div>
+      </div>
     </div>
 
-    <div class="flex flex-col">
-      <label>Password</label>
-      <input
-        pPassword
-        class="w-full"
-        formControlName="password"
-        [feedback]="false"
-        type="password"
-      />
-      <ng-container *ngFor="let error of serverErrors">
+    <ng-container *ngIf="!edit">
+      <div class="flex flex-col">
+        <label>Password</label>
+        <input
+          pPassword
+          class="w-full"
+          formControlName="password"
+          [feedback]="false"
+          type="password"
+        />
+        <ng-container *ngFor="let error of serverErrors">
+          <div
+            *ngIf="error.field === 'password'"
+            class="text-red-600 font-semibold"
+          >
+            {{ error.defaultMessage }}
+          </div>
+        </ng-container>
         <div
-          *ngIf="error.field === 'password'"
-          class="text-red-600 font-semibold"
+          *ngIf="
+            submitted ||
+            form.controls['password'].touched ||
+            form.controls['password'].dirty
+          "
         >
-          {{ error.defaultMessage }}
+          <div
+            *ngIf="form.controls['password'].errors?.['required']"
+            class="text-red-600"
+          >
+            Password is required!
+          </div>
         </div>
-      </ng-container>
-    </div>
+      </div>
 
-    <div class="flex flex-col">
-      <label>Password confirmation</label>
-      <input
-        pPassword
-        class="w-full"
-        formControlName="matchingPassword"
-        [feedback]="false"
-        type="password"
-      />
-      <ng-container *ngFor="let error of serverErrors">
+      <div class="flex flex-col">
+        <label>Password confirmation</label>
+        <input
+          pPassword
+          class="w-full"
+          formControlName="matchingPassword"
+          [feedback]="false"
+          type="password"
+        />
+        <ng-container *ngFor="let error of serverErrors">
+          <div
+            *ngIf="error.field === 'matchingPassword'"
+            class="text-red-600 font-semibold"
+          >
+            {{ error.defaultMessage }}
+          </div>
+        </ng-container>
         <div
-          *ngIf="error.field === 'matchingPassword'"
-          class="text-red-600 font-semibold"
+          *ngIf="
+            submitted ||
+            form.controls['matchingPassword'].touched ||
+            form.controls['matchingPassword'].dirty
+          "
         >
-          {{ error.defaultMessage }}
+          <div
+            *ngIf="form.controls['matchingPassword'].errors?.['required']"
+            class="text-red-600"
+          >
+            Password confirmation is required!
+          </div>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
 
     <div class="flex flex-col pb-2">
       <label>Roles</label>
@@ -81,13 +145,17 @@
         optionLabel="name"
         appendTo="body"
         styleClass="w-full"
-        formControlName="role"
+        formControlName="roles"
         [showClear]="true"
         placeholder="Select roles"
         [filter]="false"
       ></p-multiSelect>
     </div>
 
-    <button pButton label="Register" [loading]="loading"></button>
+    <button
+      pButton
+      [label]="edit ? 'Update' : 'Add'"
+      [loading]="loading"
+    ></button>
   </div>
 </form>

@@ -10,6 +10,7 @@ import { ColorPickerModule } from 'primeng/colorpicker';
 import { ListCardComponent } from './components/list-card/list-card.component';
 import { SharedModule } from '../../shared/shared.module';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 const routes: Routes = [{ path: '', component: ListsComponent }];
 @NgModule({
@@ -23,6 +24,7 @@ const routes: Routes = [{ path: '', component: ListsComponent }];
     ColorPickerModule,
     SharedModule,
     MultiSelectModule,
+    ConfirmPopupModule,
   ],
 })
 export class ListsModule {}

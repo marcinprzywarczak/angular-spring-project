@@ -3,7 +3,7 @@
 }
 
 .menuItem {
-  @apply hover:text-gray-600 cursor-pointer;
+  @apply hover:text-gray-600 cursor-pointer py-4;
 }
 
 .menuItemActive {

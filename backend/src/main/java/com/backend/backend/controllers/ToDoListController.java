@@ -70,8 +70,13 @@ public class ToDoListController {
         return this.toDoListRepository.findDistinctByUsersOrUserOrderById(auth, auth);
     }
 
+    @GetMapping("/all")
+    public List<ToDoList> getAll() {
+        return this.toDoListRepository.findAll();
+    }
+
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated() and @userSecurity.userBelongsToList(authentication, #id)")
+    @PreAuthorize("(isAuthenticated() and @userSecurity.userBelongsToList(authentication, #id)) or hasRole('ADMIN')")
     public ResponseEntity<ToDoList> findUserById(@PathVariable(value = "id") long id, Authentication authentication) {
         Optional<ToDoList> toDoList = toDoListRepository.findById(id, Sort.by(Sort.Direction.ASC, "toDoListItemSet.id"));
         if(toDoList.isPresent()) {
@@ -121,7 +126,7 @@ public class ToDoListController {
     }
 
     @PostMapping("{id}/addNewItem")
-    @PreAuthorize("isAuthenticated() and @userSecurity.userBelongsToList(authentication, #id)")
+    @PreAuthorize("(isAuthenticated() and @userSecurity.userBelongsToList(authentication, #id)) or hasRole('ADMIN')")
     public ResponseEntity<?> addNewItemToList(@PathVariable(value = "id") long id, @RequestBody ToDoListItemDao toDoListItemDao) {
         Optional<ToDoList> toDoList = toDoListRepository.findById(id);
         if(toDoList.isPresent()) {
@@ -138,7 +143,7 @@ public class ToDoListController {
     }
 
     @DeleteMapping("/deleteItem/{id}")
-    @PreAuthorize("isAuthenticated() and @userSecurity.userBelongsToList(authentication, #id)")
+    @PreAuthorize("(isAuthenticated() and @userSecurity.userBelongsToList(authentication, #id)) or hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteToDoListItem(@PathVariable(value = "id") long id, Authentication authentication) {
         try{
             toDoListItemRepository.deleteById(id);
@@ -149,7 +154,7 @@ public class ToDoListController {
     }
 
     @PostMapping("{id}/checkAsDone")
-    @PreAuthorize("isAuthenticated() and @userSecurity.userBelongsToList(authentication, #id)")
+    @PreAuthorize("(isAuthenticated() and @userSecurity.userBelongsToList(authentication, #id)) or hasRole('ADMIN')")
     public ResponseEntity<?> checkItemAsDone(@PathVariable(value = "id") long id, @RequestBody boolean isDone) {
         Optional<ToDoListItem> toDoListItem = toDoListItemRepository.findById(id);
         if(toDoListItem.isPresent()) {

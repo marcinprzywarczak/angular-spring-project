@@ -15,7 +15,7 @@ public class ToDoListItem {
 
     private boolean isDone;
 
-    @ManyToOne(cascade = CascadeType.REMOVE, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "todo_list_id", nullable = false)
     @JsonBackReference
     private ToDoList toDoList;

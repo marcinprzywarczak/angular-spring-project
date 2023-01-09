@@ -1,8 +1,10 @@
 package com.backend.backend.services;
 
 import com.backend.backend.dto.NewUserDto;
+import com.backend.backend.dto.UpdateUserDto;
 import com.backend.backend.dto.UserDto;
 import com.backend.backend.models.*;
+import com.backend.backend.payload.MessageResponse;
 import com.backend.backend.repositories.RoleRepository;
 import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.validation.UserAlreadyExistException;
@@ -12,15 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -61,26 +61,7 @@ public class UserService {
         user.setName(newUserDto.getName());
         user.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
         user.setEmail(newUserDto.getEmail());
-        Set<String> strRoles = newUserDto.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                if ("ROLE_ADMIN".equals(role)) {
-                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(adminRole);
-                } else {
-                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(userRole);
-                }
-            });
-        }
+        Set<Role> roles = getRoles(newUserDto.getRoles());
         user.setRoles(roles);
         return userRepository.save(user);
     }
@@ -113,5 +94,43 @@ public class UserService {
             }
             return userRepository.findDistinctByEmailContainingOrNameContainingOrId(filter.getGlobalFilter(), filter.getGlobalFilter(), id, pageable);
         }
+    }
+
+    public ResponseEntity<?> updateUser(UpdateUserDto updateUserDto, long id) {
+        Optional<User> user = userRepository.findById(id);
+        Set<Role> roles = getRoles(updateUserDto.getRoles());
+        if(user.isPresent()) {
+            User userUpdate = user.get();
+            userUpdate.setRoles(roles);
+            userUpdate.setEmail(updateUserDto.getEmail());
+            userUpdate.setName(updateUserDto.getName());
+            userRepository.save(userUpdate);
+            return ResponseEntity.ok().body(new MessageResponse("User successfully updated!"));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    public Set<Role> getRoles(Set<String> strRoles) {
+        Set<Role> roles = new HashSet<>();
+
+        if (strRoles == null) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        } else {
+            strRoles.forEach(role -> {
+                if ("ROLE_ADMIN".equals(role)) {
+                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(adminRole);
+                } else {
+                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(userRole);
+                }
+            });
+        }
+        return roles;
     }
 }

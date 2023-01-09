@@ -10,7 +10,7 @@ export class AlertService {
   showSuccess(message: string) {
     this.messageService.add({
       severity: 'success',
-      summary: 'Sukces!',
+      summary: 'Success!',
       detail: message,
     });
   }
@@ -18,7 +18,7 @@ export class AlertService {
   showError(message: string) {
     this.messageService.add({
       severity: 'error',
-      summary: 'Błąd!',
+      summary: 'Error!',
       detail: message,
     });
   }

@@ -1,6 +1,8 @@
 <div class="w-full flex flex-col items-center" *ngIf="list">
-  <div>{{ list.name }}</div>
-  <div>{{ list.description }}</div>
+  <div>
+    Name: <b>{{ list.name }}</b>
+  </div>
+  <div>Description: {{ list.description }}</div>
   <div class="flex flex-col">
     <div
       class="w-full flex flex-row justify-between py-2"
@@ -19,8 +21,13 @@
       </div>
     </div>
     <div class="flex flex-row">
-      <input pInputText [(ngModel)]="newItem" />
-      <button pButton label="Add" (click)="addNewItem()"></button>
+      <input pInputText [(ngModel)]="newItem" class="rounded-r-none" />
+      <button
+        pButton
+        label="Add"
+        (click)="addNewItem()"
+        class="rounded-l-none"
+      ></button>
     </div>
   </div>
 </div>

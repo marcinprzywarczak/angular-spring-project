@@ -8,14 +8,14 @@ import java.util.Set;
 
 @PasswordMatches
 public class NewUserDto extends UserDto {
-    private Set<String> role;
+    private Set<String> roles;
 
 
-    public Set<String> getRole() {
-        return role;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public void setRole(Set<String> role) {
-        this.role = role;
+    public void setRoles(Set<String> role) {
+        this.roles = role;
     }
 }

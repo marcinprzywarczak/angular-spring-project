@@ -21,6 +21,7 @@ import { SharedModule } from './shared/shared.module';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { ForbiddenPageComponent } from './pages/forbidden-page/forbidden-page.component';
 import { ForbiddenInterceptor } from './shared/interceptors/forbidden.interceptor';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [AppComponent, ForbiddenPageComponent],
@@ -35,6 +36,7 @@ import { ForbiddenInterceptor } from './shared/interceptors/forbidden.intercepto
     ConfirmPopupModule,
     SharedModule,
     NgxPermissionsModule.forRoot(),
+    ConfirmDialogModule,
   ],
   providers: [
     httpInterceptorProviders,

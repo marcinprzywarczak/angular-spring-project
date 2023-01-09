@@ -1,21 +1,24 @@
 package com.backend.backend.controllers;
 
 import com.backend.backend.dto.NewUserDto;
+import com.backend.backend.dto.UpdateUserDto;
 import com.backend.backend.dto.UserDto;
-import com.backend.backend.models.Filter;
-import com.backend.backend.models.LoginForm;
-import com.backend.backend.models.Role;
-import com.backend.backend.models.User;
+import com.backend.backend.models.*;
+import com.backend.backend.payload.MessageResponse;
 import com.backend.backend.repositories.RoleRepository;
+import com.backend.backend.repositories.ToDoListRepository;
 import com.backend.backend.repositories.UserRepository;
 import com.backend.backend.services.UserService;
 import com.backend.backend.validation.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/user")
@@ -37,6 +41,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private ToDoListRepository toDoListRepository;
+
+    @Autowired
     private RoleRepository roleRepository;
     @GetMapping
     public List<User> findAllUsers(final HttpServletRequest request, Authentication authentication) {
@@ -47,7 +54,6 @@ public class UserController {
     @PostMapping("/filterUser")
     @PreAuthorize("hasRole('ADMIN')")
     public Page<User> filterUser(final HttpServletRequest request, Authentication authentication, @RequestBody Filter filter) {
-//        System.out.println("auth: " + authentication.getName());
         return userService.getUserFilter(filter);
     }
 
@@ -93,6 +99,36 @@ public class UserController {
 
         User registered = userService.addNewUserAccount(newUserDto);
         return registered;
+    }
+
+    @PutMapping("/{id}/updateUser")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateUser(@PathVariable(value = "id") long id,
+                           @Valid @RequestBody UpdateUserDto updateUser){
+        return userService.updateUser(updateUser, id);
+    }
+    @DeleteMapping("/{id}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<?> deleteUser(@PathVariable(value = "id") long id){
+        try {
+            Optional<User> user = userRepository.findById(id);
+            if(user.isPresent()) {
+                Set<ToDoList> userLists = user.get().getUserToDoLists();
+                this.toDoListRepository.deleteAll(userLists);
+                Set<ToDoList> lists = user.get().getToDoLists();
+                for (ToDoList list: lists
+                     ) {
+                    list.getUsers().remove(user.get());
+                }
+            }
+
+            userRepository.deleteById(id);
+            return ResponseEntity.ok().body(new MessageResponse("User successfully updated!"));
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/roles")

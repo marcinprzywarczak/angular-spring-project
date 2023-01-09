@@ -4,7 +4,7 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ListApiService } from '../../../../shared/services/list-api.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AlertService } from '../../../../shared/services/alert.service';
@@ -23,6 +23,7 @@ export class AddListDialogComponent implements OnInit, AfterViewInit {
   isEdit: boolean;
   list: ToDoList;
   userOptions: User[];
+  submitted: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,11 +41,11 @@ export class AddListDialogComponent implements OnInit, AfterViewInit {
     });
     this.isEdit = this.config.data.edit;
     this.form = this.formBuilder.group({
-      name: [],
-      color: [],
-      description: [],
-      text_color: [],
-      users: [],
+      name: [null, [Validators.required]],
+      color: ['#000000', [Validators.required]],
+      description: [null, [Validators.required]],
+      text_color: ['#000000', [Validators.required]],
+      users: [null, [Validators.required]],
     });
     if (this.isEdit) {
       this.list = this.config.data.toDoList;
@@ -65,12 +66,15 @@ export class AddListDialogComponent implements OnInit, AfterViewInit {
           return user.email;
         })
       );
+    } else {
+      this.form.get('color')?.patchValue('#000000');
+      this.form.get('text_color')?.patchValue('#ffffff');
     }
   }
 
   onSubmit() {
-    console.log(this.form.value);
-    // return;
+    this.submitted = true;
+    if (this.form.invalid) return;
     if (this.isEdit) {
       this.updateList();
     } else {
