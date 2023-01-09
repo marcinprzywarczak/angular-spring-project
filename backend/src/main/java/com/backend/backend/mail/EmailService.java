@@ -1,15 +1,21 @@
 package com.backend.backend.mail;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jdk.jfr.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service(value = "MailService")
 public class EmailService {
@@ -21,7 +27,10 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    public void sendMail() throws MessagingException {
+    @Autowired
+    private FreeMarkerConfigurer freeMarkerConfigurer;
+
+    public void sendMail() {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -29,9 +38,9 @@ public class EmailService {
             helper.setTo(new String[]{"marcino8928@wp.pl","marcinprzywarczak@gmail.com"});
             helper.setSubject("TEST");
             helper.setText("Test test test");
-            helper.setText("http://localhost:4200/lists");
+            helper.setText(getMail(), true);
 
-            javaMailSender.send(message);
+            javaMailSender.send(helper.getMimeMessage());
         }
 
 
@@ -40,6 +49,19 @@ public class EmailService {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String getMail() {
+        StringBuffer content = new StringBuffer();
+        Map<String, String> map = new HashMap<>();
+        map.put("firstName", "Jan");
+        map.put("lastName", "Nowak");
+        try {
+            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(freeMarkerConfigurer.getConfiguration().getTemplate("email-template.ftlh"),map));
+        } catch (Exception e) {
+
+        }
+        return content.toString();
     }
 
 }
