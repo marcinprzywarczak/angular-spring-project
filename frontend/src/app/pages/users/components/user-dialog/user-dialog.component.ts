@@ -51,8 +51,8 @@ export class UserDialogComponent implements OnInit {
       : {
           name: [null, [Validators.required]],
           email: [null, [Validators.required, Validators.email]],
-          password: [null, [Validators.required]],
-          matchingPassword: [null, [Validators.required]],
+          // password: [null, [Validators.required]],
+          // matchingPassword: [null, [Validators.required]],
           roles: [null],
         };
     this.form = this.formBuilder.group(controlsConfig);

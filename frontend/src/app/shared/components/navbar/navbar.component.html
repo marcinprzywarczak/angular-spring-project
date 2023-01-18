@@ -31,7 +31,6 @@
         (clickOutside)="userDropdown = false"
         (click)="userDropdown = !userDropdown"
         class="relative w-full cursor-pointer"
-        [ngClass]="userDropdown ? 'bg-gray-200' : ''"
       >
         <div
           class="flex flex-row items-center cursor-pointer hover:text-gray-600 px-2 py-4"
@@ -42,19 +41,25 @@
         <div
           [@dropDownMenu]="userDropdown"
           *ngIf="userDropdown"
-          class="w-full z-50 overflow-visible absolute bg-gray-200 cursor-pointer"
+          class="max-w-full min-w-max w-full z-50 overflow-visible absolute bg-gray-200 cursor-pointer right-0 flex flex-col"
         >
           <a
             routerLink="changePassword"
             class="py-4 px-2 hover:text-gray-600 menu-item"
           >
-            Change password
+            <div class="flex items-center justify-between gap-2">
+              Change password
+              <i class="pi pi-lock"></i>
+            </div>
           </a>
           <div
             class="py-4 px-2 hover:text-gray-600 menu-item"
             (click)="logout()"
           >
-            Logout
+            <div class="flex items-center justify-between">
+              Logout
+              <i class="pi pi-arrow-right"></i>
+            </div>
           </div>
         </div>
       </div>

@@ -77,13 +77,13 @@ public class UserController {
 
     @PostMapping("/addNewUser")
     @PreAuthorize("hasRole('ADMIN')")
-    public User addNewUser(@Valid @RequestBody NewUserDto newUserDto,
+    public ResponseEntity<?> addNewUser(@Valid @RequestBody NewUserDto newUserDto,
                            HttpServletRequest request,
                            Errors errors){
 
-        User registered = userService.addNewUserAccount(newUserDto);
-//        this.emailService.sendMail(registered.getName(), registered.getEmail(), newUserDto.getPassword());
-        return registered;
+        String password = userService.addNewUserAccount(newUserDto);
+        this.emailService.sendMail(newUserDto.getName(), newUserDto.getEmail(), password);
+        return ResponseEntity.ok().body(new MessageResponse("User successfully added!"));
     }
 
     @PutMapping("/{id}/updateUser")

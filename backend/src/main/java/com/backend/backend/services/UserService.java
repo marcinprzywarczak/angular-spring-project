@@ -55,21 +55,22 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User addNewUserAccount(NewUserDto newUserDto) throws UserAlreadyExistException {
+    public String addNewUserAccount(NewUserDto newUserDto) throws UserAlreadyExistException {
         if (emailExists(newUserDto.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email address: "
                     + newUserDto.getEmail());
         }
 
 //        System.out.println("password; " + generatePassword());
-
+        String password = generatePassword();
         User user = new User();
         user.setName(newUserDto.getName());
-        user.setPassword(passwordEncoder.encode(newUserDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(password));
         user.setEmail(newUserDto.getEmail());
         Set<Role> roles = getRoles(newUserDto.getRoles());
         user.setRoles(roles);
-        return userRepository.save(user);
+        userRepository.save(user);
+        return password;
     }
 
     private boolean emailExists(String email) {

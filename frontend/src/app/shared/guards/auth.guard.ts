@@ -22,8 +22,7 @@ export class AuthGuard implements CanActivate {
   canActivate(): boolean {
     if (this.userService.getState()) {
       const user = this.userService.getUser();
-
-      this.ngxPermissionsService.loadPermissions(user.roles);
+      if (user.roles) this.ngxPermissionsService.loadPermissions(user.roles);
     }
     if (!this.userService.getState()) {
       this.router.navigate(['login']);

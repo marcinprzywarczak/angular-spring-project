@@ -1,5 +1,7 @@
 import { RegisterUser } from './registerUser';
 
-export interface AddNewUser extends RegisterUser {
+export interface AddNewUser {
+  name: string;
+  email: string;
   roles: String[];
 }
