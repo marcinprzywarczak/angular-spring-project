@@ -30,15 +30,20 @@ public class EmailService {
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
-    public void sendMail() {
+    public void sendMail(String name, String login, String password) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom("noreply@gmail.com", "noreply@spring.com");
-            helper.setTo(new String[]{"marcino8928@wp.pl","marcinprzywarczak@gmail.com"});
-            helper.setSubject("TEST");
-            helper.setText("Test test test");
-            helper.setText(getMail(), true);
+            helper.setTo(login);
+            helper.setSubject("Hello in my App");
+
+            Map<String, String> map = new HashMap<>();
+            map.put("name", name);
+            map.put("login", login);
+            map.put("password", password);
+
+            helper.setText(getMail(map), true);
 
             javaMailSender.send(helper.getMimeMessage());
         }
@@ -51,13 +56,10 @@ public class EmailService {
         }
     }
 
-    public String getMail() {
+    public String getMail(Map<String, String> values) {
         StringBuffer content = new StringBuffer();
-        Map<String, String> map = new HashMap<>();
-        map.put("firstName", "Jan");
-        map.put("lastName", "Nowak");
         try {
-            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(freeMarkerConfigurer.getConfiguration().getTemplate("email-template.ftlh"),map));
+            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(freeMarkerConfigurer.getConfiguration().getTemplate("hello-mail.ftlh"),values));
         } catch (Exception e) {
 
         }

@@ -49,7 +49,6 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   getUsers(event: LazyLoadEvent) {
-    console.log(event);
     this.loading = true;
     this.lazyLoadEvent = event;
     this.userApiService
@@ -105,9 +104,14 @@ export class UserListComponent implements OnInit, OnDestroy {
               this.getUsers(this.lazyLoadEvent);
             },
             error: (err) => {
-              this.alertService.showError(
-                `${err.status} error while deleting user.`
-              );
+              if (err.error.message) {
+                this.alertService.showError(
+                  `${err.status} error. ${err.error.message}`
+                );
+              } else
+                this.alertService.showError(
+                  `${err.status} error while deleting user.`
+                );
             },
           });
       },

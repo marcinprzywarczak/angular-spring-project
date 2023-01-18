@@ -3,6 +3,7 @@ package com.backend.backend.controllers;
 import com.backend.backend.dto.NewUserDto;
 import com.backend.backend.dto.UpdateUserDto;
 import com.backend.backend.dto.UserDto;
+import com.backend.backend.mail.EmailService;
 import com.backend.backend.models.*;
 import com.backend.backend.payload.MessageResponse;
 import com.backend.backend.repositories.RoleRepository;
@@ -46,9 +47,12 @@ public class UserController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private EmailService emailService;
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public List<User> findAllUsers(final HttpServletRequest request, Authentication authentication) {
-//        System.out.println("auth: " + authentication.getName());
         return userRepository.findAll();
     }
 
@@ -58,14 +62,9 @@ public class UserController {
         return userService.getUserFilter(filter);
     }
 
-    @GetMapping("/all")
-    public List<User> all() {
-        return userRepository.findUserAll();
-    }
-
 
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> findUserById(@PathVariable(value = "id") long id) {
         Optional<User> user = userRepository.findById(id);
 
@@ -76,22 +75,6 @@ public class UserController {
         }
     }
 
-    @PostMapping
-    public User saveUser(@Validated @RequestBody User user) {
-        return userRepository.save(user);
-    }
-
-    @PostMapping("/register")
-    public User register(@Valid @RequestBody UserDto userDto,
-                           HttpServletRequest request,
-                           Errors errors){
-
-        User registered = userService.registerNewUserAccount(userDto);
-
-
-        return registered;
-    }
-
     @PostMapping("/addNewUser")
     @PreAuthorize("hasRole('ADMIN')")
     public User addNewUser(@Valid @RequestBody NewUserDto newUserDto,
@@ -99,6 +82,7 @@ public class UserController {
                            Errors errors){
 
         User registered = userService.addNewUserAccount(newUserDto);
+//        this.emailService.sendMail(registered.getName(), registered.getEmail(), newUserDto.getPassword());
         return registered;
     }
 
@@ -115,6 +99,9 @@ public class UserController {
         try {
             Optional<User> user = userRepository.findById(id);
             if(user.isPresent()) {
+                if(user.get().getEmail().equals("admin@test.com")) {
+                    return ResponseEntity.badRequest().body(new MessageResponse("Cannot delete default admin account."));
+                }
                 Set<ToDoList> userLists = user.get().getUserToDoLists();
                 this.toDoListRepository.deleteAll(userLists);
                 Set<ToDoList> lists = user.get().getToDoLists();

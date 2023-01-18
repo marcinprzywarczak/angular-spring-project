@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
+import { DropDownAnimation } from '../../animations/dropdown-animation';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
+  animations: [DropDownAnimation],
 })
 export class NavbarComponent implements OnInit {
   isLogged: boolean;

@@ -9,12 +9,22 @@ import { ToDoList } from '../models/toDoList';
 export class ListApiService {
   constructor(private http: HttpClient) {}
 
-  getAllLists() {
+  getLists() {
     let headers = new HttpHeaders({
       Accept: 'application/json',
       'Content-type': 'application/json',
     });
     return this.http.get<ToDoList[]>(`${environment.apiUrl}/api/toDoList`, {
+      headers: headers,
+    });
+  }
+
+  getAllLists() {
+    let headers = new HttpHeaders({
+      Accept: 'application/json',
+      'Content-type': 'application/json',
+    });
+    return this.http.get<ToDoList[]>(`${environment.apiUrl}/api/toDoList/all`, {
       headers: headers,
     });
   }

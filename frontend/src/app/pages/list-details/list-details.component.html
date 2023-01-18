@@ -1,33 +1,80 @@
-<div class="w-full flex flex-col items-center" *ngIf="list">
-  <div>
-    Name: <b>{{ list.name }}</b>
+<div class="h-full max-h-screen" *ngIf="list" style="background-color: #fdfffc">
+  <div
+    class="bg-blue-400 text-white py-10 text-3xl"
+    style="background-color: #0081af"
+  >
+    <div class="md:px-40 px-10 w-full text-center">{{ list.name }}</div>
+    <div class="md:px-40 px-10 w-full text-center text-xl pt-2">
+      {{ list.description }}
+    </div>
   </div>
-  <div>Description: {{ list.description }}</div>
-  <div class="flex flex-col">
+  <div class="w-full md:px-40 px-10 text-white flex flex-col gap-y-5">
     <div
-      class="w-full flex flex-row justify-between py-2"
-      *ngFor="let item of list.toDoListItemSet; let i = index"
+      class="w-full -mt-6 shadow-xl flex flex-col md:flex-row items-center rounded-xl bg-white p-4 gap-4 md:items-start"
     >
-      <div [ngClass]="item.done ? 'line-through' : ''">
-        {{ i + 1 }}. {{ item.id }};{{ item.name }}
+      <div
+        class="flex flex-col md:w-1/2 bg-blue-600 rounded-md p-2 h-full w-full"
+        style="background-color: #0081af"
+      >
+        <ng-container *ngIf="list.toDoListItemSet.length === 0">
+          <div>There are no items in list. Add your first item.</div>
+        </ng-container>
+        <div
+          class="w-full flex flex-row justify-between py-2"
+          *ngFor="let item of list.toDoListItemSet; let i = index"
+        >
+          <div [ngClass]="item.done ? 'line-through' : ''">
+            {{ i + 1 }}. {{ item.name }}
+          </div>
+          <div class="flex flex-row items-center gap-x-2">
+            <i
+              class="pi cursor-pointer"
+              [ngClass]="item.done ? 'pi-times' : 'pi-check'"
+              (click)="checkAsDone(item.id, !item.done)"
+            ></i>
+            <i
+              class="pi pi-trash cursor-pointer"
+              (click)="deleteItem(item.id)"
+            ></i>
+          </div>
+        </div>
       </div>
-      <div class="flex flex-row gap-x-2">
-        <i
-          class="pi"
-          [ngClass]="item.done ? 'pi-times' : 'pi-check'"
-          (click)="checkAsDone(item.id, !item.done)"
-        ></i>
-        <i class="pi pi-trash" (click)="deleteItem(item.id)"></i>
+      <div
+        class="md:w-1/2 flex flex-col bg-blue-600 rounded-md p-2 h-auto h-full w-full"
+        style="background-color: #0081af"
+      >
+        <div class="text-xl pb-2">Add new item to list</div>
+        <div class="flex w-full">
+          <input
+            pInputText
+            [(ngModel)]="newItem"
+            class="rounded-r-none focus:shadow-none w-full"
+            style="box-shadow: none"
+          />
+          <button
+            pButton
+            label="Add"
+            (click)="addNewItem()"
+            class="rounded-l-none"
+            style="box-shadow: none"
+          ></button>
+        </div>
       </div>
     </div>
-    <div class="flex flex-row">
-      <input pInputText [(ngModel)]="newItem" class="rounded-r-none" />
-      <button
-        pButton
-        label="Add"
-        (click)="addNewItem()"
-        class="rounded-l-none"
-      ></button>
+
+    <div
+      class="w-full shadow-xl flex flex-col items-center rounded-xl bg-white p-4 items-stretch"
+    >
+      <div class="text-xl text-black pb-2">Belongs users</div>
+      <div class="flex flex-wrap gap-x-2 gap-y-2">
+        <div
+          class="bg-blue-600 text-white py-1 px-1 rounded-md"
+          style="background-color: #0081af"
+          *ngFor="let user of list.users"
+        >
+          {{ user.email }}
+        </div>
+      </div>
     </div>
   </div>
 </div>

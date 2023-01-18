@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
-import { AddListDialogComponent } from './components/add-list-dialog/add-list-dialog.component';
 import { ListApiService } from '../../shared/services/list-api.service';
 import { ToDoList } from '../../shared/models/toDoList';
 import { DataReloadTriggerService } from '../../shared/services/data-reload-trigger.service';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../../shared/services/alert.service';
+import { AddListDialogComponent } from '../../shared/components/add-list-dialog/add-list-dialog.component';
 
 @Component({
   selector: 'app-lists',
@@ -17,9 +17,9 @@ export class ListsComponent implements OnInit, OnDestroy {
   triggerSubscription: Subscription;
   constructor(
     private dialogService: DialogService,
-    private listApiService: ListApiService,
+    protected listApiService: ListApiService,
     private dataReloadTriggerService: DataReloadTriggerService,
-    private alertService: AlertService
+    protected alertService: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class ListsComponent implements OnInit, OnDestroy {
   }
 
   getLists() {
-    this.listApiService.getAllLists().subscribe({
+    this.listApiService.getLists().subscribe({
       next: (res) => {
         this.lists = res;
         console.log('res', res);

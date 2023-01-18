@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ToDoList } from '../../../../shared/models/toDoList';
+import { ToDoList } from '../../models/toDoList';
 import { AddListDialogComponent } from '../add-list-dialog/add-list-dialog.component';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ListApiService } from '../../../../shared/services/list-api.service';
-import { DataReloadTriggerService } from '../../../../shared/services/data-reload-trigger.service';
-import { AlertService } from '../../../../shared/services/alert.service';
+import { ListApiService } from '../../services/list-api.service';
+import { DataReloadTriggerService } from '../../services/data-reload-trigger.service';
+import { AlertService } from '../../services/alert.service';
 import { ConfirmationService } from 'primeng/api';
-import { User } from '../../../../shared/models/user';
-import { UserService } from '../../../../shared/services/user.service';
+import { User } from '../../models/user';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-list-card',

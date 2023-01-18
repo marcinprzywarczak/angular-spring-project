@@ -44,4 +44,8 @@ export class UserApiService {
   deleteUser(id: number) {
     return this.http.delete(`${environment.apiUrl}/api/user/${id}/delete`);
   }
+
+  getUsers() {
+    return this.http.get<User[]>(`${environment.apiUrl}/api/user`);
+  }
 }

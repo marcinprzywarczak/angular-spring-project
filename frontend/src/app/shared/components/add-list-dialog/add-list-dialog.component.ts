@@ -5,13 +5,14 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ListApiService } from '../../../../shared/services/list-api.service';
+import { ListApiService } from '../../services/list-api.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { AlertService } from '../../../../shared/services/alert.service';
-import { DataReloadTriggerService } from '../../../../shared/services/data-reload-trigger.service';
-import { ToDoList } from '../../../../shared/models/toDoList';
-import { User } from '../../../../shared/models/user';
+import { AlertService } from '../../services/alert.service';
+import { DataReloadTriggerService } from '../../services/data-reload-trigger.service';
+import { ToDoList } from '../../models/toDoList';
+import { User } from '../../models/user';
 import { HttpClient } from '@angular/common/http';
+import { UserApiService } from '../../services/user-api.service';
 
 @Component({
   selector: 'app-add-list-dialog',
@@ -32,18 +33,17 @@ export class AddListDialogComponent implements OnInit, AfterViewInit {
     private alertService: AlertService,
     private dataReloadTriggerService: DataReloadTriggerService,
     private config: DynamicDialogConfig,
-    private http: HttpClient
+    private http: HttpClient,
+    private userApiService: UserApiService
   ) {}
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8080/api/user').subscribe((res: any) => {
-      this.userOptions = res;
-    });
+    this.loadUsers();
     this.isEdit = this.config.data.edit;
     this.form = this.formBuilder.group({
-      name: [null, [Validators.required]],
+      name: [null, [Validators.required, Validators.maxLength(255)]],
       color: ['#000000', [Validators.required]],
-      description: [null, [Validators.required]],
+      description: [null, [Validators.required, Validators.maxLength(500)]],
       text_color: ['#000000', [Validators.required]],
       users: [null, [Validators.required]],
     });
@@ -73,6 +73,7 @@ export class AddListDialogComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
+    console.log(this.form);
     this.submitted = true;
     if (this.form.invalid) return;
     if (this.isEdit) {
@@ -115,6 +116,17 @@ export class AddListDialogComponent implements OnInit, AfterViewInit {
           this.alertService.showError('Error while adding new list.');
         }
         console.log('err', err);
+      },
+    });
+  }
+
+  loadUsers() {
+    this.userApiService.getUsers().subscribe({
+      next: (res) => {
+        this.userOptions = res;
+      },
+      error: (err) => {
+        this.alertService.showError(`${err.status} error while getting users`);
       },
     });
   }

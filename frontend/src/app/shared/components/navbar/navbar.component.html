@@ -16,27 +16,41 @@
       >
         Users
       </div>
+      <div
+        *ngxPermissionsOnly="'ROLE_ADMIN'"
+        class="menuItem"
+        routerLink="/allLists"
+        routerLinkActive="menuItemActive"
+      >
+        All lists
+      </div>
     </div>
     <div *ngIf="isLogged; else loginButtons">
       <div
         appClickOutside
         (clickOutside)="userDropdown = false"
         (click)="userDropdown = !userDropdown"
-        class="relative w-full cursor-pointer py-4"
+        class="relative w-full cursor-pointer"
         [ngClass]="userDropdown ? 'bg-gray-200' : ''"
       >
         <div
-          class="flex flex-row items-center cursor-pointer hover:text-gray-600 px-2"
+          class="flex flex-row items-center cursor-pointer hover:text-gray-600 px-2 py-4"
         >
           <div class="pr-2">{{ user.email }}</div>
           <i class="pi pi-angle-down text-center align-middle"></i>
         </div>
         <div
+          [@dropDownMenu]="userDropdown"
           *ngIf="userDropdown"
           class="w-full z-50 overflow-visible absolute bg-gray-200 cursor-pointer"
         >
-          <div class="py-4 px-2 hover:text-gray-600">Change password</div>
-          <div class="py-4 px-2 hover:text-gray-600" (click)="logout()">
+          <div class="py-4 px-2 hover:text-gray-600 menu-item">
+            Change password
+          </div>
+          <div
+            class="py-4 px-2 hover:text-gray-600 menu-item"
+            (click)="logout()"
+          >
             Logout
           </div>
         </div>

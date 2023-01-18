@@ -62,23 +62,5 @@ export class RegisterComponent implements OnInit {
         );
       },
     });
-    // this.http
-    //   .post('http://localhost:8080/api/user/register', {
-    //     name: this.form.get('name')?.value,
-    //     email: this.form.get('email')?.value,
-    //     password: this.form.get('password')?.value,
-    //     matchingPassword: this.form.get('passwordConfirmation')?.value,
-    //   })
-    //   .subscribe({
-    //     next: (res) => {
-    //       console.log(res);
-    //     },
-    //     error: (error) => {
-    //       console.log(error);
-    //       console.log('error', error.error.message);
-    //       if (error.status === 400)
-    //         console.log(JSON.parse(error.error.message));
-    //     },
-    //   });
   }
 }

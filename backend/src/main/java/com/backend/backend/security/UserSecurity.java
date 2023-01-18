@@ -47,4 +47,12 @@ public class UserSecurity {
         }
         return true;
     }
+
+    public boolean userIsAuthorOfList(Authentication authentication, Long listId) {
+        Optional<ToDoList> toDoList = this.toDoListRepository.findById(listId);
+        if(toDoList.isPresent()) {
+            return Objects.equals(toDoList.get().getUser().getEmail(), authentication.getName());
+        }
+        return true;
+    }
 }

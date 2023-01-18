@@ -6,6 +6,7 @@ import com.backend.backend.models.User;
 import com.backend.backend.repositories.RoleRepository;
 import com.backend.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,9 @@ import java.util.Set;
 
 @Component
 public class DataLoader implements ApplicationRunner {
+
+    @Value("${backend.app.adminPassword}")
+    private String password;
 
     private UserRepository userRepository;
 
@@ -37,7 +41,7 @@ public class DataLoader implements ApplicationRunner {
             return;
         User user = new User();
         user.setName("admin");
-        user.setPassword(passwordEncoder.encode("admin"));
+        user.setPassword(passwordEncoder.encode(password));
         user.setEmail("admin@test.com");
         Set<Role> roles = new HashSet<>();
         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role not found"));
