@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
 import { RegisterUser } from '../models/registerUser';
+import { UpdatePassword } from '../models/updatePassword';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,13 @@ export class AuthService {
     return this.http.post(
       `${this.BASE_API_URL}/api/auth/register`,
       registerData
+    );
+  }
+
+  updatePassword(updatePassword: UpdatePassword) {
+    return this.http.post(
+      `${this.BASE_API_URL}/api/auth/changePassword`,
+      updatePassword
     );
   }
 }

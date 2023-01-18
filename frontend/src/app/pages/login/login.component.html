@@ -1,15 +1,17 @@
-<div class="w-full h-full flex items-center justify-center pt-20">
+<div
+  class="w-full h-full flex items-center justify-center pt-20 max-w-xl mx-auto"
+>
   <form
     [formGroup]="form"
     (ngSubmit)="submit()"
-    class="flex flex-col gap-y-2 w-1/4"
+    class="flex flex-col gap-y-2 w-full px-5"
   >
     <div *ngIf="serverError" class="text-red-600">
       {{ serverError }}
     </div>
     <div class="flex flex-col">
       <label>Email</label>
-      <input pInputText formControlName="login" />
+      <input pInputText formControlName="login" class="w-full" />
       <div
         *ngIf="
           submitted ||
@@ -35,6 +37,7 @@
     <div class="flex flex-col">
       <label>Password</label>
       <input
+        class="w-full"
         pPassword
         formControlName="password"
         [feedback]="false"

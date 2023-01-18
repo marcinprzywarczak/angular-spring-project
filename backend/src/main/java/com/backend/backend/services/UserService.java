@@ -169,4 +169,13 @@ public class UserService {
         return gen.generatePassword(10, splCharRule, lowerCaseRule,
                 upperCaseRule, digitRule);
     }
+
+    public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
+        return passwordEncoder.matches(oldPassword, user.getPassword());
+    }
+
+    public void changeUserPassword(final User user, final String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
 }

@@ -1,7 +1,9 @@
 package com.backend.backend.controllers;
 
 
+import com.backend.backend.dto.ChangePasswordDto;
 import com.backend.backend.dto.UserDto;
+import com.backend.backend.exceptions.GenericResponse;
 import com.backend.backend.models.LoginForm;
 import com.backend.backend.models.User;
 import com.backend.backend.payload.MessageResponse;
@@ -17,15 +19,21 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -87,5 +95,21 @@ public class AuthController {
                          Errors errors){
 
         return userService.registerNewUserAccount(userDto);
+    }
+    @PostMapping("/changePassword")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updatePassword(Authentication authentication,
+                               @Valid @RequestBody ChangePasswordDto changePasswordDto
+                         ) {
+        User auth = userRepository.findByEmail(authentication.getName());
+        if(!userService.checkIfValidOldPassword(auth, changePasswordDto.getOldPassword())) {
+            List<ObjectError> errors = new ArrayList<>();
+            errors.add(new FieldError("oldPassword", "oldPassword", "Incorrect current password"));
+
+            return ResponseEntity.badRequest().body(new GenericResponse(errors, "oldPassword"));
+        }
+        userService.changeUserPassword(auth, changePasswordDto.getPassword());
+        return ResponseEntity.ok().body(new MessageResponse("Password successfully updated!"));
+
     }
 }
