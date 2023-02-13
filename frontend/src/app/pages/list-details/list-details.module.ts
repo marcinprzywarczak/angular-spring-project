@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { SharedModule } from '../../shared/shared.module';
 
 const routes: Routes = [{ path: '', component: ListDetailsComponent }];
 @NgModule({
@@ -15,6 +16,7 @@ const routes: Routes = [{ path: '', component: ListDetailsComponent }];
     InputTextModule,
     FormsModule,
     ButtonModule,
+    SharedModule,
   ],
 })
 export class ListDetailsModule {}

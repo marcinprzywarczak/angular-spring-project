@@ -73,6 +73,13 @@ export class ListApiService {
     );
   }
 
+  updateItem(itemId: number, value: string) {
+    return this.http.put(
+      `${environment.apiUrl}/api/toDoList/${itemId}/updateItem`,
+      value
+    );
+  }
+
   email() {
     return this.http.get(`${environment.apiUrl}/api/toDoList/mail`);
   }

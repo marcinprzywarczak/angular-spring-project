@@ -10,11 +10,13 @@ import {
 } from 'ngx-permissions';
 import { ListCardComponent } from './components/list-card/list-card.component';
 import { AddListDialogComponent } from './components/add-list-dialog/add-list-dialog.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
+import { ListItemComponent } from './components/list-item/list-item.component';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   declarations: [
@@ -23,12 +25,14 @@ import { ButtonModule } from 'primeng/button';
     ClickOutsideDirective,
     ListCardComponent,
     AddListDialogComponent,
+    ListItemComponent,
   ],
   exports: [
     ClickStopPropagationDirective,
     NavbarComponent,
     ClickOutsideDirective,
     ListCardComponent,
+    ListItemComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +43,8 @@ import { ButtonModule } from 'primeng/button';
     ColorPickerModule,
     MultiSelectModule,
     ButtonModule,
+    FormsModule,
+    RippleModule,
   ],
 })
 export class SharedModule {}

@@ -42,14 +42,14 @@ public class ToDoListController {
 
     @PostMapping("/add")
     @PreAuthorize("isAuthenticated()")
-    public ToDoList addNewList(Authentication authentication,@Valid @RequestBody ToDoListDto toDoListDto) {
+    public ToDoList addNewList(Authentication authentication, @Valid @RequestBody ToDoListDto toDoListDto) {
         User auth = userRepository.findByEmail(authentication.getName());
         Set<String> users = toDoListDto.getUsers();
         Set<User> listUsers = new HashSet<>();
         users.forEach(user -> {
             System.out.println("user: " + user);
-            User user1 =  userRepository.findByEmail(user);
-            if(user1 != null) {
+            User user1 = userRepository.findByEmail(user);
+            if (user1 != null) {
                 listUsers.add(user1);
             }
         });
@@ -81,7 +81,7 @@ public class ToDoListController {
     @PreAuthorize("(isAuthenticated() and (@userSecurity.userBelongsToList(authentication, #id) or @userSecurity.userIsAuthorOfList(authentication, #id))) or hasRole('ADMIN')")
     public ResponseEntity<ToDoList> findUserById(@PathVariable(value = "id") long id, Authentication authentication) {
         Optional<ToDoList> toDoList = toDoListRepository.findById(id);
-        if(toDoList.isPresent()) {
+        if (toDoList.isPresent()) {
             return ResponseEntity.ok().body(toDoList.get());
         } else {
             return ResponseEntity.notFound().build();
@@ -90,16 +90,15 @@ public class ToDoListController {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("(isAuthenticated() and @userSecurity.userIsAuthorOfList(authentication, #id)) or hasRole('ADMIN')")
-    public ResponseEntity<?> updateToDoList(@PathVariable(value = "id") long id, Authentication authentication,
-                                            @RequestBody @Valid ToDoListDto toDoListDto) {
+    public ResponseEntity<?> updateToDoList(@PathVariable(value = "id") long id, Authentication authentication, @RequestBody @Valid ToDoListDto toDoListDto) {
         Optional<ToDoList> toDoList = toDoListRepository.findById(id);
-        if(toDoList.isPresent()) {
+        if (toDoList.isPresent()) {
             ToDoList toDoListEdit = toDoList.get();
             Set<String> users = toDoListDto.getUsers();
             Set<User> listUsers = new HashSet<>();
             users.forEach(user -> {
-                User user1 =  userRepository.findByEmail(user);
-                if(user1 != null) {
+                User user1 = userRepository.findByEmail(user);
+                if (user1 != null) {
                     listUsers.add(user1);
                 }
             });
@@ -110,8 +109,7 @@ public class ToDoListController {
             toDoListEdit.setText_color(toDoListDto.getText_color());
             toDoListRepository.save(toDoListEdit);
             return ResponseEntity.ok().body(new MessageResponse("To do list successfully updated!"));
-        }
-        else {
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -119,10 +117,10 @@ public class ToDoListController {
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("(isAuthenticated() and @userSecurity.userIsAuthorOfList(authentication, #id)) or hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteToDoList(@PathVariable(value = "id") long id, Authentication authentication) {
-        try{
+        try {
             toDoListRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -131,40 +129,51 @@ public class ToDoListController {
     @PreAuthorize("(isAuthenticated() and (@userSecurity.userBelongsToList(authentication, #id) or @userSecurity.userIsAuthorOfList(authentication, #id))) or hasRole('ADMIN')")
     public ResponseEntity<?> addNewItemToList(@PathVariable(value = "id") long id, @RequestBody ToDoListItemDao toDoListItemDao) {
         Optional<ToDoList> toDoList = toDoListRepository.findById(id);
-        if(toDoList.isPresent()) {
+        if (toDoList.isPresent()) {
             ToDoListItem toDoListItem = new ToDoListItem();
             toDoListItem.setName(toDoListItemDao.getName());
             toDoListItem.setDone(toDoListItem.isDone());
             toDoListItem.setToDoList(toDoList.get());
             this.toDoListItemRepository.save(toDoListItem);
             return ResponseEntity.ok().body(new MessageResponse("New item successfully added!"));
-        }
-        else {
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/deleteItem/{id}")
-    @PreAuthorize("(isAuthenticated() and (@userSecurity.userBelongsToList(authentication, #id) or @userSecurity.userIsAuthorOfList(authentication, #id))) or hasRole('ADMIN')")
+    @PreAuthorize("(isAuthenticated() and (@userSecurity.userBelongsToListByItemId(authentication, #id) or @userSecurity.userIsAuthorOfListByItemId(authentication, #id))) or hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deleteToDoListItem(@PathVariable(value = "id") long id, Authentication authentication) {
-        try{
+        try {
             toDoListItemRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("{id}/checkAsDone")
-    @PreAuthorize("(isAuthenticated() and (@userSecurity.userBelongsToList(authentication, #id) or @userSecurity.userIsAuthorOfList(authentication, #id))) or hasRole('ADMIN')")
+    @PreAuthorize("(isAuthenticated() and (@userSecurity.userBelongsToListByItemId(authentication, #id) or @userSecurity.userIsAuthorOfListByItemId(authentication, #id))) or hasRole('ADMIN')")
     public ResponseEntity<?> checkItemAsDone(@PathVariable(value = "id") long id, @RequestBody boolean isDone) {
         Optional<ToDoListItem> toDoListItem = toDoListItemRepository.findById(id);
-        if(toDoListItem.isPresent()) {
+        if (toDoListItem.isPresent()) {
             toDoListItem.get().setDone(isDone);
             this.toDoListItemRepository.save(toDoListItem.get());
             return ResponseEntity.ok().body(new MessageResponse("Item successfully updated!"));
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        else {
+    }
+
+    @PutMapping("{id}/updateItem")
+    @PreAuthorize("(isAuthenticated() and (@userSecurity.userBelongsToListByItemId(authentication, #id) or @userSecurity.userIsAuthorOfListByItemId(authentication, #id))) or hasRole('ADMIN')")
+    public ResponseEntity<?> updateListItem(@PathVariable(value = "id") long id, @RequestBody String value) {
+        Optional<ToDoListItem> toDoListItem = toDoListItemRepository.findById(id);
+        if (toDoListItem.isPresent()) {
+            toDoListItem.get().setName(value);
+            this.toDoListItemRepository.save(toDoListItem.get());
+            return ResponseEntity.ok().body(new MessageResponse("Item successfully updated!"));
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

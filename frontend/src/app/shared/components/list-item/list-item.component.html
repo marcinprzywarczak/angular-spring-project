@@ -1,0 +1,42 @@
+<div class="w-full flex flex-row justify-between py-2">
+  <ng-container *ngIf="!edit; else editTemplate">
+    <div
+      class="flex-1"
+      (click)="editItem(item.id)"
+      [ngClass]="item.done ? 'line-through' : ''"
+    >
+      {{ index + 1 }}. {{ item.name }}
+    </div>
+    <div class="flex flex-row items-center gap-x-2">
+      <!--    <i class="pi pi-trash cursor-pointer" (click)="editItem(item.id)"></i>-->
+      <i
+        class="pi cursor-pointer"
+        [ngClass]="item.done ? 'pi-times' : 'pi-check'"
+        (click)="checkAsDone(item.id, !item.done)"
+      ></i>
+      <i class="pi pi-trash cursor-pointer" (click)="deleteItem(item.id)"></i>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #editTemplate>
+  <div class="flex flex-row w-full">
+    <div class="p-inputgroup">
+      <input
+        [(ngModel)]="value"
+        type="text"
+        pInputText
+        style="box-shadow: none"
+      />
+      <button
+        (click)="updateItem(item.id)"
+        class="p-button-primary"
+        type="button"
+        pButton
+        pRipple
+        icon="pi pi-check"
+        style="box-shadow: none"
+      ></button>
+    </div>
+  </div>
+</ng-template>

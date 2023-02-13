@@ -1,10 +1,8 @@
 package com.backend.backend.security;
 
-import com.backend.backend.models.ERole;
-import com.backend.backend.models.Role;
-import com.backend.backend.models.ToDoList;
-import com.backend.backend.models.User;
+import com.backend.backend.models.*;
 import com.backend.backend.repositories.RoleRepository;
+import com.backend.backend.repositories.ToDoListItemRepository;
 import com.backend.backend.repositories.ToDoListRepository;
 import com.backend.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,9 @@ public class UserSecurity {
 
     @Autowired
     ToDoListRepository toDoListRepository;
+
+    @Autowired
+    private ToDoListItemRepository toDoListItemRepository;
 
     public boolean userCanManageList(Authentication authentication, Long listId) {
         Optional<ToDoList> toDoList = this.toDoListRepository.findById(listId);
@@ -45,7 +46,15 @@ public class UserSecurity {
             User auth = userRepository.findByEmail(authentication.getName());
             return toDoList.get().getUsers().contains(auth);
         }
-        return true;
+        return false;
+    }
+    public boolean userBelongsToListByItemId(Authentication authentication, Long itemId) {
+        Optional<ToDoListItem> toDoListItem = this.toDoListItemRepository.findById(itemId);
+        if(toDoListItem.isPresent()) {
+            User auth = userRepository.findByEmail(authentication.getName());
+            return toDoListItem.get().getToDoList().getUsers().contains(auth);
+        }
+        return false;
     }
 
     public boolean userIsAuthorOfList(Authentication authentication, Long listId) {
@@ -53,6 +62,13 @@ public class UserSecurity {
         if(toDoList.isPresent()) {
             return Objects.equals(toDoList.get().getUser().getEmail(), authentication.getName());
         }
-        return true;
+        return false;
+    }
+    public boolean userIsAuthorOfListByItemId(Authentication authentication, Long itemId) {
+        Optional<ToDoListItem> toDoListItem = this.toDoListItemRepository.findById(itemId);
+        if(toDoListItem.isPresent()) {
+            return Objects.equals(toDoListItem.get().getToDoList().getUser().getEmail(), authentication.getName());
+        }
+        return false;
     }
 }

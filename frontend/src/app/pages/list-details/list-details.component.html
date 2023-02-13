@@ -19,25 +19,11 @@
         <ng-container *ngIf="list.toDoListItemSet.length === 0">
           <div>There are no items in list. Add your first item.</div>
         </ng-container>
-        <div
-          class="w-full flex flex-row justify-between py-2"
+        <app-list-item
           *ngFor="let item of list.toDoListItemSet; let i = index"
-        >
-          <div [ngClass]="item.done ? 'line-through' : ''">
-            {{ i + 1 }}. {{ item.name }}
-          </div>
-          <div class="flex flex-row items-center gap-x-2">
-            <i
-              class="pi cursor-pointer"
-              [ngClass]="item.done ? 'pi-times' : 'pi-check'"
-              (click)="checkAsDone(item.id, !item.done)"
-            ></i>
-            <i
-              class="pi pi-trash cursor-pointer"
-              (click)="deleteItem(item.id)"
-            ></i>
-          </div>
-        </div>
+          [index]="i"
+          [item]="item"
+        ></app-list-item>
       </div>
       <div
         class="md:w-1/2 flex flex-col bg-blue-600 rounded-md p-2 h-auto h-full w-full"
